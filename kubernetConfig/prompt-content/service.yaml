@@ -1,0 +1,14 @@
+# Type NodePort to allow free communication between the three main services
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: prompt-content-service
+  namespace: promptcontent
+spec:
+  selector:
+    app: promptcontent-db
+  ports:
+    - port: 1433
+      targetPort: 1433
+  type: NodePort
