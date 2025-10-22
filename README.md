@@ -8,8 +8,10 @@
 ### Course
 Software Design
 ### Delivery dates
-🗓️ First delivery: October 26, 2025 
+🗓️ First delivery: October 26, 2025
+
 🗓️ Second delivery: November 8, 2025
+
 🗓️ Final delivery: November 23, 2025
 
 
