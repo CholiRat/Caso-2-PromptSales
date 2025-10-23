@@ -1,0 +1,14 @@
+# NAMESPACE: promptcrm-db
+# This file contains the Persistent Volume Claim for promptcrm
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sqlserver-promptcrm-pvc
+  namespace: promptcrm-db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

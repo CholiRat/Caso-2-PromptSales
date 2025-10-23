@@ -1,14 +1,17 @@
-# Type NodePort to allow free communication between the three main services
+# NAMESPACE: promptcrm-db
+# The service file establishes the point of connection for promptcrm in our kubernet
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: promptcrm-service
-  namespace: promptcrm
+  name: sqlserver-promptcrm-service
+  namespace: promptcrm-db
 spec:
+  type: NodePort		# NodePort to allow free communication between the three main services and our local computer
   selector:
     app: promptcrm-db
   ports:
-    - port: 1433
+    - port: 1433 		# The default port on sql server
       targetPort: 1433
-  type: NodePort
+      nodePort: 30003		# Any port ranging from 30000 to 32767
+

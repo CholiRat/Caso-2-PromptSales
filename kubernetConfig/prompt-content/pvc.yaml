@@ -1,0 +1,14 @@
+# NAMESPACE: promptcontent-db
+# This file contains the Persistent Volume Claim for promptcontent
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sqlserver-promptcontent-pvc
+  namespace: promptcontent-db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

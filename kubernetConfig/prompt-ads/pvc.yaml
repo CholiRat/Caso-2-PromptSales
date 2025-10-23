@@ -1,0 +1,14 @@
+# NAMESPACE: promptads-db
+# This file contains the Persistent Volume Claim for promptads
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sqlserver-promptads-pvc
+  namespace: promptads-db
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

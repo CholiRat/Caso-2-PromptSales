@@ -1,0 +1,29 @@
+# NAMESPACE: redis-cache
+# This HorizontalPodAutoscaler (HPA) file fulfills the goal of scalability in the system.
+# The replicas are applied to the cache service.
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: redis-hpa
+  namespace: redis-cache
+spec:
+  scaleTargetRef:				# This file targets the deployment of redis.
+    apiVersion: apps/v1
+    kind: Deployment
+    name: redis-deployment
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70		# The autoscale will take place when more than 70% of a pod's cpu is being used
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 75		# The autoscale will take place when more than 75% of a pod's memory is being used

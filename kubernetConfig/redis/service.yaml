@@ -1,0 +1,17 @@
+# NAMESPACE: redis-cache
+# The service file establishes the point of connection for redis in our kubernet
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: redis-cache
+spec:
+  type: LoadBalancer		# Regulates the traffic between the multiple pods replicas
+  selector:
+    app: redis-cache
+  ports:
+    - port: 6379 		# The default port on redis
+      targetPort: 6379
+
+

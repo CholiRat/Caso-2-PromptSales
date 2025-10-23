@@ -1,14 +1,17 @@
-# Type NodePort to allow free communication between the three main services
+# NAMESPACE: promptads-db
+# The service file establishes the point of connection for promptads in our kubernet
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: prompt-ads-service
-  namespace: promptads
+  name: sqlserver-promptads-service
+  namespace: promptads-db
 spec:
+  type: NodePort		# NodePort to allow free communication between the three main services and our local computer
   selector:
     app: promptads-db
   ports:
-    - port: 1433
+    - port: 1433 		# The default port on sql server
       targetPort: 1433
-  type: NodePort
+      nodePort: 30002		# Any port ranging from 30000 to 32767
+
