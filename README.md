@@ -36,6 +36,45 @@ This project will be executed through three iterations.
 ### 3.1 Performance
 
 ### 3.2 Scalability
+>>THE DATA IN THIS SECTION IS PROVISIONAL AND REQUIRES FURTHER ADJUSTMENTS
+In order to manage scalability, Kubernetes is used to host both the application and its associated databases. It enables dynamic resource allocation and automated deployment of containerized services
+The four databases are:
+- PromptContent
+- PromptAds
+- PromptCRM
+- Redis cache
+The main application is PromptSales. It is the access door to all the related services.
+[Check kubernetes configuration folder]( https://github.com/CholiRat/Caso-2-PromptSales/tree/main/kubernetConfig)
+Regarding database scalability, SQL Server replicas are inherently limited due to their stateful nature and data consistency requirements. Which is why the scaling will occur in the redis module and the main app.
+Here is an example of Horizontal Pod Autoscaling (HPA). 
+```yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: redis-hpa
+  namespace: redis-cache
+spec:
+  scaleTargetRef:				# This file targets the deployment of redis.
+    apiVersion: apps/v1
+    kind: Deployment
+    name: redis-deployment
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70		# The autoscale will take place when more than 70% of a pod's cpu is being used
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 75		# The autoscale will take place when more than 75% of a pod's memory is being used
+```
+It declares a minimum of 2 replicas and maximum of 10. The scale takes place when more than 70% of CPU is being consumed in one pod or 75% of memory is being used instead.
 
 ### 3.3 Reliability
 
