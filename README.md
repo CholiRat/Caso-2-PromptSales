@@ -37,7 +37,9 @@ This project will be executed through three iterations.
 
 ### 3.2 Scalability
 >>THE DATA IN THIS SECTION IS PROVISIONAL AND REQUIRES FURTHER ADJUSTMENTS
+
 In order to manage scalability, Kubernetes is used to host both the application and its associated databases. It enables dynamic resource allocation and automated deployment of containerized services
+
 The four databases are:
 - PromptContent
 - PromptAds
