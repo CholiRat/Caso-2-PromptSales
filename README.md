@@ -46,8 +46,11 @@ The four databases are:
 - PromptCRM
 - Redis cache
 The main application is PromptSales. It is the access door to all the related services.
+
 [Check kubernetes configuration folder]( https://github.com/CholiRat/Caso-2-PromptSales/tree/main/kubernetConfig)
+
 Regarding database scalability, SQL Server replicas are inherently limited due to their stateful nature and data consistency requirements. Which is why the scaling will occur in the redis module and the main app.
+
 Here is an example of Horizontal Pod Autoscaling (HPA). 
 ```yaml
 apiVersion: autoscaling/v2
@@ -94,15 +97,35 @@ It declares a minimum of 2 replicas and maximum of 10. The scale takes place whe
 
 ## 4. Domain Driven Design
 
-
-
-
-
-
-
-
-
-
+#### 4.1 Prompt Content Domains
+Prompt content focuses on requests to AI services to produce ad material such as text, images and videos. As such, the following list illustrates the domains that compose this business.
+- User domain
+- AI domain
+- Target domain
+- Prompt domain
+- Generated content domain
+- Channel domain
+#### 4.2 Prompt Ads Domains
+Prompt ads manages the creation of new marketing campaigns.
+- User domain
+- AI domain
+- Organization domain
+- Campaign domain
+- Ad domain
+- Target domain
+- Reaction domain
+- Channel domain
+- Client domain
+- Payment domain
+#### 4.3 Prompt CRM Domains
+Prompt CRM has the goal to follow activity of interested customers.
+- User domain
+- AI domain
+- Target domain
+- Channel domain
+- Client domain
+- Marketing services domain
+- Payment domain
 
 
 
