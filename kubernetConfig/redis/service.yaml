@@ -7,7 +7,7 @@ metadata:
   name: redis-service
   namespace: redis-cache
 spec:
-  type: LoadBalancer		# Regulates the traffic between the multiple pods replicas
+  type: ClusterIP		# Regulates the traffic between the multiple pods replicas
   selector:
     app: redis-cache
   ports:

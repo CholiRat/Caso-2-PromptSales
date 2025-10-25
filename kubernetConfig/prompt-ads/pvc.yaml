@@ -11,4 +11,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 64Gi
+  storageClassName: managed-premium  	# Premium ssd storage from aks

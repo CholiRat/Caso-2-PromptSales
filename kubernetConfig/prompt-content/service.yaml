@@ -7,11 +7,11 @@ metadata:
   name: sqlserver-promptcontent-service
   namespace: promptcontent-db
 spec:
-  type: NodePort		# NodePort to allow free communication between the three main services and our local computer
+  type: ClusterIP		# It is an intern service in the k8
   selector:
     app: promptcontent-db
   ports:
     - port: 1433 		# The default port on sql server
       targetPort: 1433
-      nodePort: 30001		# Any port ranging from 30000 to 32767
+
 
