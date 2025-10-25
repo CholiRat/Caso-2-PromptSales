@@ -94,8 +94,6 @@ To ensure the different PromptSales modules (Ads, Content, and CRM) work in an i
 
 We will use this approach for all communication between the services and for managing automation processes. When designing our APIs, we will follow RESTful principles, such as using cache to optimize interactions and make the platform faster.
 
-To organize and connect all these applications and services in an enterprise environment, we are considering using an API management platform like Red Hat.
-
 Finally, for the specialized communication between the various AI services, which have different requirements, we are reserving the use of MCP servers (Message Oriented Middleware Communication Protocols).
 ### 3.8 Compliance
 
