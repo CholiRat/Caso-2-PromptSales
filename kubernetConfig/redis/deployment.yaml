@@ -1,0 +1,31 @@
+# NAMESPACE: redis-cache
+# This pod contains the deployment for the cache storage in redis.
+# Redis does not need pvc since it is working as temporary storage
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+  namespace: redis-cache
+spec:
+  replicas: 1 			# This value gets overwritten by the hpa.yaml file
+  selector:
+    matchLabels:
+      app: redis-cache
+  template:
+    metadata:
+      labels:
+        app: redis-cache
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+          - containerPort: 6379
+        resources:
+          requests:
+            memory: "256Mi"		# The minimum amount of cpu and memory for redis-cache containers.
+            cpu: "500m"
+          limits:
+            memory: "512Mi"		# The maximum amount of cpu and memory for redis-cache containers.
+            cpu: "2000m"

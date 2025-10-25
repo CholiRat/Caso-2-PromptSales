@@ -1,0 +1,29 @@
+# This is a configuration file that establishes how scalability and availability Will be managed through aks services.
+# We establish main regions and secondary regions to assure different connection points.
+# The endpoints are placeholders. These must be changed when the app is deployed in azure.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: azure-config
+  namespace: default
+data:
+  # Primary regions
+  AZURE_PRIMARY_REGION: "US"
+  PROMPTSALES_DB_PRIMARY: "promptsales-db-us.database.windows.net"
+  PROMPTADS_DB_PRIMARY: "promptads-db-us.database.windows.net"
+  PROMPTCONTENT_DB_PRIMARY: "promptcontent-db-us.database.windows.net"
+  PROMPTCRM_DB_PRIMARY: "promptcrm-db-us.database.windows.net"
+  
+  # Secondary regions
+  AZURE_SECONDARY_REGION: "West Europe" 
+  PROMPTSALES_DB_SECONDARY: "promptsales-db-westeurope.database.windows.net"
+  PROMPTADS_DB_SECONDARY: "promptads-db-westeurope.database.windows.net"
+  PROMPTCONTENT_DB_SECONDARY: "promptcontent-db-westeurope.database.windows.net"
+  PROMPTCRM_DB_SECONDARY: "promptcrm-db-westeurope.database.windows.net"
+  
+  # Replicas for read only
+  PROMPTSALES_READONLY_POOL: "promptsales-pool.readonly.database.windows.net"
+  PROMPTADS_READONLY_POOL: "promptads-pool.readonly.database.windows.net"
+  PROMPTCONTENT_READONLY_POOL: "promptcontent-pool.readonly.database.windows.net"
+  PROMPTCRM_READONLY_POOL: "promptcrm-pool.readonly.database.windows.net"
