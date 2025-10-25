@@ -90,7 +90,13 @@ It declares a minimum of 2 replicas and maximum of 10. The scale takes place whe
 ### 3.6 Maintainability
 
 ### 3.7 Interoperability
+To ensure the different PromptSales modules (Ads, Content, and CRM) work in an integrated manner and can connect with external services, we have decided to use REST APIs as our primary communication method.
 
+We will use this approach for all communication between the services and for managing automation processes. When designing our APIs, we will follow RESTful principles, such as using cache to optimize interactions and make the platform faster.
+
+To organize and connect all these applications and services in an enterprise environment, we are considering using an API management platform like Red Hat.
+
+Finally, for the specialized communication between the various AI services, which have different requirements, we are reserving the use of MCP servers (Message Oriented Middleware Communication Protocols).
 ### 3.8 Compliance
 
 ### 3.9 Extensibility
