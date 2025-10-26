@@ -229,9 +229,20 @@ Prompt CRM has the goal to follow activity of interested customers.
 - Target domain
 - Channel domain
 - Client domain
+- Sales domain
 - Marketing services domain
 - Payment domain
-
+#### 4.3 Prompt Sales Domains
+- User domain
+- AI domain
+- Organization domain
+- Campaign domain
+- Ad domain
+- Target domain
+- Channel domain
+- Client domain
+- Payment domain
+- Services domain
 
 
 
