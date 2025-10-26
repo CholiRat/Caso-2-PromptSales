@@ -34,6 +34,7 @@ This project will be executed through three iterations.
 ## 3. Metrics for non-functional requirements
 
 ### 3.1 Performance
+Testing
 
 ### 3.2 Scalability
 To transform PromptSales into a highly scalable system, we will use Azure Kubernetes Service (AKS). Additionally, Azure SQL Database will assure horizontal scaling capabilities in all the databases.
