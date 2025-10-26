@@ -94,6 +94,31 @@ To give a better understanding of the architecture, a diagram is provided:
 
 ### 3.4 Availability
 
+#### Load balancers
+
+
+#### Failover and replication
+
+#### Service Level Agreement (SLA)
+Azure guarantees 99.95% availability for their SQL Database services, which forms the foundation of our high-availability architecture.
+Assuming a 31 day month, this means:
+•	Total minutes in month: 44,640 min
+•	Available minutes per Azure SLA: 44,617.68 min
+•	Azure SLA downtime allowance: 22.32 min
+#### Failover considerations
+According to Azure documentation, databases are down for up to 25 seconds while the regions are being switched. For this calculation, we assume the worst scenario, 25 seconds of downtime.
+- Assumed fail frequency: 2 times per day through all Prompt Sales services
+- Daily downtime: 50 seconds (2 × 25 seconds)
+- Monthly downtime (31 days): 1,550 seconds (25.833 minutes)
+- Azure infrastructure: 22.32 min
+- Planned failovers: 25.833 min
+- Total downtime: 48.153 min
+- Available total minutes: 44,591.847 min
+
+Monthly availability: 99.892%
+The system achieves 99.89% availability, comfortably meeting the standards for this requirement.
+
+
 ### 3.5 Security
 
 ### 3.6 Maintainability
