@@ -36,22 +36,13 @@ This project will be executed through three iterations.
 ### 3.1 Performance
 
 ### 3.2 Scalability
->>THE DATA IN THIS SECTION IS PROVISIONAL AND REQUIRES FURTHER ADJUSTMENTS
+To transform PromptSales into a highly scalable system, we will use Azure Kubernetes Service (AKS). Additionally, Azure SQL Database will assure horizontal scaling capabilities in all the databases.
 
-In order to manage scalability, Kubernetes is used to host both the application and its associated databases. It enables dynamic resource allocation and automated deployment of containerized services
+The Kubernetes network, managed by AKS, is responsible for dynamically scaling the stateless application pods and the Redis cache. 
 
-The four databases are:
-- PromptContent
-- PromptAds
-- PromptCRM
-- Redis cache
-The main application is PromptSales. It is the access door to all the related services.
+The Redis cache is configured for automatic scaling using a Horizontal Pod Autoscaler (HPA) with a range of X to Y replicas. According to the established amount in the performance section.
 
-[Check kubernetes configuration folder]( https://github.com/CholiRat/Caso-2-PromptSales/tree/main/kubernetConfig)
-
-Regarding database scalability, SQL Server replicas are inherently limited due to their stateful nature and data consistency requirements. Which is why the scaling will occur in the redis module and the main app.
-
-Here is an example of Horizontal Pod Autoscaling (HPA). 
+Here is the HPA file that demonstrates scalability with the cache:
 ```yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -79,7 +70,25 @@ spec:
           type: Utilization
           averageUtilization: 75		# The autoscale will take place when more than 75% of a pod's memory is being used
 ```
-It declares a minimum of 2 replicas and maximum of 10. The scale takes place when more than 70% of CPU is being consumed in one pod or 75% of memory is being used instead.
+It declares a minimum of X replicas and maximum of Y. The scale takes place when more than 70% of CPU is being consumed in one pod or 75% of memory is being used instead.
+
+All scaling rules and pod configurations are defined and managed through declarative YAML files.
+
+[Check kubernetes configuration folder]( https://github.com/CholiRat/Caso-2-PromptSales/tree/main/kubernetConfig)
+
+For the databases, scalability is managed directly by Azure SQL Database. This plataform offering provides robust horizontal scaling through two primary mechanisms:
+
+-	Elastic Pools: To efficiently manage performance and cost for multiple databases with variable usage patterns.
+-	Sharding with Elastic Database Tools: To distribute data across multiple databases to handle high-volume transactions.
+
+For more information check the oficial documentation: [Elastic scale - Azure SQL Database | Microsoft Learn](https://learn.microsoft.com/es-es/azure/azure-sql/database/elastic-scale-introduction?view=azuresql)
+
+To meet the requirement of handling 100,000 transactions, the data will be partitioned across X sharded set of databases. This is according to the data retrieved from the perfomance benchmarks
+-	Number of Shards: The system will be configured with X shards. 
+-	Data Distribution: Information will be partitioned into X distinct parts using a hash function over the campaignIDs. In this way, distribution is balanced according to the amount of campaigns in the system.
+
+To give a better understanding of the architecture, a diagram is provided:
+![DiagramScalability]( https://github.com/CholiRat/Caso-2-PromptSales/tree/main/img/diagrama-scalability.png)
 
 ### 3.3 Reliability
 
