@@ -191,13 +191,13 @@ Finally, for the specialized communication between the various AI services, whic
 
 ### 3.9 Extensibility
 Design choices have been made to guarantee the extensibility of the system across its lifetime. In this section, design patterns and other tools are discussed to demonstrate their ability to expand the application.
-#### REST
+#### 3.9.1 REST
 The REST architecture employed across the entire system enables integration with new sub-businesses and third-party services. 
 
 When a new business is incorporated into PromptSales, the frontend layer remains unaffected, allowing to add new services. Also, the stateless nature of REST architecture further enhances independence between the different architectural layers, ensuring clean separation and modularity.
-#### MCP 
+#### 3.9.2 MCP 
 MCP servers centralize the connection point for various AI models. This architecture allows new sub-businesses to immediately leverage existing AI tools available to develop. Furthermore, the system is extensible at the MCP layer; new tools, context sources, or AI models can be added to the MCP server, thereby expanding its capabilities without requiring modifications across every other system component.
-#### Domain Driven Design
+#### 3.9.3 Domain Driven Design
 The Domain-Driven Design architecture for the backend is crucial for extensibility. It ensures that new functionalities are added as entirely new domains, rather than by modifying existing ones. This prevents regressions and maintains system stability. Consequently, development teams can work independently on different domains, accelerating feature development and enabling parallel workstreams without creating interdependencies or conflicts.
 
 ## 4. Domain Driven Design
