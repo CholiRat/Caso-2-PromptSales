@@ -94,11 +94,69 @@ To give a better understanding of the architecture, a diagram is provided:
 
 ### 3.4 Availability
 
-#### Load balancers
-
-
 #### Failover and replication
+To ensure system resilience, high availability is implemented across both the databases and application using a combination of Azure SQL databases and AKS.
 
+For the data layer, high availability is achieved using the **Geo-Replication** feature of Azure SQL Database (PaaS). This service is configured for every database shard (PromptSales, PromptAds, PromptContent, PromptCRM) and provides two critical functions:
+- Real-time Replication: A constant, synchronized replica of each primary database is maintained in a secondary geographic region (West Europe) which is constantly being synced with the primary region. This ensures data is duplicated in near real-time, protecting against High availability disaster recovery.
+- Automatic Failover: In the event of an outage in the primary region (US), Azure automatically redirects all connections to the secondary database without manual intervention. This failover process takes less than 25 seconds, guaranteeing high availability. Once the primary region is restored, connections are moved back.
+
+
+
+The connection endpoints for this configuration are managed within the cluster via a ConfigMap:
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: azure-config
+  namespace: default
+data:
+  # Primary regions
+  AZURE_PRIMARY_REGION: "US"
+  PROMPTSALES_DB_PRIMARY: "promptsales-db-us.database.windows.net"
+  PROMPTADS_DB_PRIMARY: "promptads-db-us.database.windows.net"
+  PROMPTCONTENT_DB_PRIMARY: "promptcontent-db-us.database.windows.net"
+  PROMPTCRM_DB_PRIMARY: "promptcrm-db-us.database.windows.net"
+  
+  # Secondary regions
+  AZURE_SECONDARY_REGION: "West Europe" 
+  PROMPTSALES_DB_SECONDARY: "promptsales-db-westeurope.database.windows.net"
+  PROMPTADS_DB_SECONDARY: "promptads-db-westeurope.database.windows.net"
+  PROMPTCONTENT_DB_SECONDARY: "promptcontent-db-westeurope.database.windows.net"
+  PROMPTCRM_DB_SECONDARY: "promptcrm-db-westeurope.database.windows.net"
+```
+For more information about Geo-replication, visit: [Active-Geo-replication](https://learn.microsoft.com/en-us/azure/azure-sql/database/active-geo-replication-configure-portal?view=azuresql&tabs=portal)
+
+On another note, AKS will assure replication and failover using K8s a LoadBalancer and HPA.
+
+Kubernetes automatically maintains the desired number of application pod replicas as defined in the Horizontal Pod Autoscaler (HPA). If a pod fails, Kubernetes immediately restarts it or schedules a new one.
+
+This is a section of the HPA file for Redis
+```yaml
+  scaleTargetRef:				# This file targets the deployment of redis.
+    apiVersion: apps/v1
+    kind: Deployment
+    name: redis-deployment
+  minReplicas: 2	 
+  maxReplicas: 10
+```
+With the LoadBalancer type service, the application efficiently distributes incoming network requests across all available, healthy application pods.
+```yaml
+# The service file establishes the point of connection for redis in our kubernet
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: redis-cache
+spec:
+  type: LoadBalancer		# Regulates the traffic between the multiple pods replicas
+  selector:
+    app: redis-cache
+  ports:
+    - port: 6379 		# The default port on redis
+      targetPort: 6379
+```
 #### Service Level Agreement (SLA)
 Azure guarantees 99.95% availability for their SQL Database services, which forms the foundation of our high-availability architecture.
 Assuming a 31 day month, this means:
