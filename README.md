@@ -88,7 +88,7 @@ To meet the requirement of handling 100,000 transactions, the data will be parti
 -	Data Distribution: Information will be partitioned into X distinct parts using a hash function over the campaignIDs. In this way, distribution is balanced according to the amount of campaigns in the system.
 
 To give a better understanding of the architecture, a diagram is provided:
-![DiagramScalability]( https://github.com/CholiRat/Caso-2-PromptSales/tree/main/img/diagrama-scalability.png)
+![DiagramScalability](img/diagrama-scalability.png)
 
 ### 3.3 Reliability
 
