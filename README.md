@@ -34,7 +34,44 @@ This project will be executed through three iterations.
 ## 3. Metrics for non-functional requirements
 
 ### 3.1 Performance
-Testing
+El software quie vamos a usar para crear el proyecto son:
+
+#### Lenguaje de programacion
+- Python
+
+#### Gestor de base de datos
+- SQL Server
+
+#### Interfaz para conectar sistemas
+- APIs Rest
+
+#### Framework para crear APIs
+- FastAPI (compatible con el lenguaje Python)
+
+### Almacen de datos en memoria
+- Redis
+
+El objetivo del rendimiento para el proyecto son los siguientes:
+- Tener un promedio de respuesta en el portal web debe ser de < 2.5 segundos por operacion.
+- Las consultas tiene que entregar resultados en menos de 400 milisegundos mediante Redis.
+- Los procesos de generacion automatica deben ejecutarse en menos de 7 segundos para solicitudes simples y menos de 20 segundos para ejecuciones complejas
+
+Buscando Benchmarks que usen el software de nosotros y con objetivos de rendimiento se encuentran los siguientes
+
+#### FastApi + Python 
+[Benchmark FastApi + Python](https://sharkbench.dev/web/python-fastapi)
+
+El hardware que ellos usan es el siguiente:
+
+**OS:** Linux/Docker
+**CPU:** Ryzen 7 7800X3D
+
+Y sus resultados son los siguientes:
+![FastApi](img/FastApiBenchmark.jpg)
+
+El cual nos dice que RPS (request per second) es de **1185** con latencia de **21.0 ms** y usando de memoria **41.2 MB**.
+
+
 
 ### 3.2 Scalability
 To transform PromptSales into a highly scalable system, we will use Azure Kubernetes Service (AKS). Additionally, Azure SQL Database will assure horizontal scaling capabilities in all the databases.
