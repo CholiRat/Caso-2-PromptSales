@@ -209,6 +209,24 @@ To give a better understanding of the architecture, a diagram is provided:
 
 ### 3.3 Reliability
 
+The project must guarantee continuous service availability and automatic fault detection.  
+The **error rate** must not exceed **0.1% of total daily transactions**.
+
+**Example:**  
+If 100,000 transactions are processed per day, the maximum allowed failures are **≤ 100**.
+
+**Azure Monitor Alerts** will be used to detect and notify critical failures.
+
+The configured alert thresholds are as follows:
+
+- **Deadlocks > 3 / 10 min →** SQL Server alert  
+- **Redis Hit Rate < 85% →** preventive alert  
+- **Pod restarts > 3 / hour →** instability alert  
+
+If issues persist for more than **10 minutes**, a ticket will automatically be created in **Azure DevOps**.  
+All detailed diagnostic information will be stored in **Azure Log Analytics Workspace**.
+
+
 ### 3.4 Availability
 
 #### Failover and replication
@@ -295,6 +313,23 @@ Monthly availability: 99.892%
 The system achieves 99.89% availability, comfortably meeting the standards for this requirement.
 
 ### 3.5 Security
+
+Confidentiality, integrity, and availability of user and transaction data in the PromptSales system must be guaranteed.  
+The following technologies will be used to ensure security:
+
+#### Authentication and Authorization
+
+**OAuth 2.0 + OpenID Connect** will be used for the API Gateway component, with access control managed through signed **JWT tokens**.
+
+#### Data Protection
+
+To protect data in our SQL Server database, **Transparent Data Encryption (TDE) with AES-256** will be used, with master keys distributed and secured using **Azure Key Vault**.
+
+#### Controls
+
+- To protect our API, **Azure API Management** will be used to limit requests per IP and validate tokens.  
+- To protect against attacks, **Azure Front Door WAF** will be used with **OWASP Core Rule Set v3.2** rules.  
+- For traceability, **Azure Monitor + Sentinel SIEM** will be used for log correlation, anomaly detection, and threat analysis.
 
 ### 3.6 Maintainability
 To ensure the maintainability of the system in both the short and long term, standardized processes will be implemented for both development and post-production support.
