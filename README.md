@@ -72,11 +72,83 @@ Y sus resultados son los siguientes:
 
 El cual nos dice que RPS (request per second) es de **1185** con latencia de **21.0 ms** y usando de memoria **41.2 MB**.
 
-Lo cual dicha informacion la extrapolamos para nuestro proyecto el cual algunos datos quedan de esta forma:
+#### SQL Server + Python
+[Benchmark SQL Server + Python](https://devblogs.microsoft.com/python/mssql-python-vs-pyodbc-benchmarking-sql-server-performance/?utm_source=chatgpt.com)
 
+Que dicho Benchmark nos habla sobre el controlador para conectar aplicaciones Python con base de datos SQL.
 
+El hardware que ellos usan es el siguiente:
 
+**OS:** Windows 11 Pro
+**CPU:** Intel Core i7 (12th Gen)
+**RAM:** 32 GB
+**Database:** Azure SQL Database - VCores 1
+**Storage:** 32 GB
 
+Y este es un resumen del rendimiento:
+
+![mssql](img/mssqlPython.jpg)
+
+Y estos son los tiempos que usaron cuando ejecutaron alguna operacion:
+
+![operationSQL](img/operationSQL.png)
+
+Ahora con dicha informacion la extrapolamos con el software y performance de nuestro proyecto:
+
+#### RQS (request per second)
+
+- Total RPS = 1,667
+
+- Cache hits = 0.5 × 1,667 = 833 RPS
+
+- DB writes = 0.30 × 1,667 = 500 RPS
+
+- DB reads = 0.20 × 1,667 = 334 RPS
+
+- Total operaciones que tocan DB ≈ 834 RPS (500 + 334)
+
+#### Pods que vamos a usar para FastAPI
+
+Para el DB-Bound vamos a usar la siguien formula:
+
+> pods_db = ⌈834(RPS)/300(procesos)⌉ = 3pods
+
+#### Dimensiones de la base de datos (vCores)
+
+- DB TPS requerido ≈ 834 TPS(transaction per second).
+- Pensamos que es 100 TPS/vsCore esta seria la formula 
+
+> vCores = ⌈834(RPS)/100(TPS)⌉ = 9vCores
+
+**Nota:** Se usara Azure SQL Business Critical para tener una menos latencia
+
+#### Redis
+
+Para tener la latencia a menos de 400 ms se y sabemos que los cache hits son: 833RPS * 2 ≈ 1700 ops(operation per second)
+
+**Nota:** Se usara Azure Cache for Redis con capacidad para ≥5k ops/s y latencia < 10 ms para garantizar los ≤ 400 ms
+
+#### IA generation
+
+Para la IA lo pensamos asi IA RPS ≈ 83.
+Lo cual el promedio de ejecucion: (simple + complejo) ≈ 5.4 s → concurrencia requerida ≈ 83 × 5.4 ≈ 448 tareas concurrentes.
+
+**Nota:** Se usara Azure OpenAI para asegurar tiempos <7s / <20s 
+
+#### Almacenamiento
+
+La formula sera la siguiente:
+
+$$
+GB_{por\_día} = \frac{PPM \times bytes/prompt}{1024^2} \times 60
+$$
+
+- PPM = prompts por minuto
+- bytes/prompt = tamaño promedio de cada prompt
+- 1024^2 = bytes a megabytes
+- 60 = minutos a horas
+
+**Nota:** Se usara Azure Blob Storage para guardar dicha informacion
 
 ### 3.2 Scalability
 To transform PromptSales into a highly scalable system, we will use Azure Kubernetes Service (AKS). Additionally, Azure SQL Database will assure horizontal scaling capabilities in all the databases.
