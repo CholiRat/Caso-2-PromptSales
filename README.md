@@ -117,7 +117,7 @@ $$
 - Assuming **100 TPS per vCore**, the formula is:  
 
 $$
-vCores = ⌈\frac{834\ (RPS)}{100\ (TPS)}}⌉ = 9\ vCores
+vCores = ⌈834(RPS)/100(TPS)⌉ = 9vCores
 $$
 
 **Note:** Azure SQL **Business Critical** will be used to minimize latency.
