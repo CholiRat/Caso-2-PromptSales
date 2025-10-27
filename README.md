@@ -67,9 +67,13 @@ El hardware que ellos usan es el siguiente:
 **CPU:** Ryzen 7 7800X3D
 
 Y sus resultados son los siguientes:
+
 ![FastApi](img/FastApiBenchmark.jpg)
 
 El cual nos dice que RPS (request per second) es de **1185** con latencia de **21.0 ms** y usando de memoria **41.2 MB**.
+
+Lo cual dicha informacion la extrapolamos 
+
 
 
 
