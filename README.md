@@ -251,6 +251,7 @@ Source code and task management will adhere to the following methodologies:
 
       GitFlow Image
 
+      ![GitFlow](img/Gitflow.jpg)
 
 - Other things that are going to be employ for Maintainability during development are the following:
 
