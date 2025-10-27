@@ -272,7 +272,7 @@ Prompt CRM has the goal to follow activity of interested customers.
 - Sales domain
 - Marketing services domain
 - Payment domain
-#### 4.3 Prompt Sales Domains
+#### 4.4 Prompt Sales Domains
 - User domain
 - AI domain
 - Organization domain
@@ -284,5 +284,10 @@ Prompt CRM has the goal to follow activity of interested customers.
 - Payment domain
 - Services domain
 
+#### Diagram
+The following is an image of the Domain Driven Design backend. The frontend communicates through an API and has access to all sub-businesses. 
 
+The main application PromptSales gains access to Prompt Content, Prompt Ads and Prompt CRM through the infrastructure layer with a facade. From this point, it uses an ETL approach to obtain data from sub-businesses and syncronize information.
+
+![DDD Diagram](img/DomainDrivenDesign.png)
 
