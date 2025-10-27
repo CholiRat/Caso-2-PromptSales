@@ -290,4 +290,4 @@ The following is an image of the Domain Driven Design backend. The frontend comm
 The main application PromptSales gains access to Prompt Content, Prompt Ads and Prompt CRM through the infrastructure layer with a facade. From this point, it uses an ETL approach to obtain data from sub-businesses and syncronize information.
 
 ![DDD Diagram](img/DomainDrivenDesign.png)
-
+Check the pdf file to gain a better look of this diagram: [DomainDrivenDesign-Diagram](diagrams/DomainDrivenDesign.pdf)
