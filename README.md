@@ -222,14 +222,95 @@ The system achieves 99.89% availability, comfortably meeting the standards for t
 ### 3.5 Security
 
 ### 3.6 Maintainability
+To ensure the maintainability of the system in both the short and long term, standardized processes will be implemented for both development and post-production support.
+
+#### 3.6.1 During Development
+
+Source code and task management will adhere to the following methodologies:
+
+- Task Management: All work will be managed through a ticketing system in Trello. Each team member is responsible for keeping their tickets updated on a weekly basis.
+- Version Control: A Gitflow-based workflow will be used, with the following branches:
+
+    - Main Branch / Master
+      - Contains stable production code of all project, including versions (release tag, eg: v1.2.3), production configuration (environment variables or config files) and documentation for releases that should be update or include somewhere else in the branch, like release notes or a CHANGELOG.md for example.
+    
+    - HotFixes Branch
+      - Branches for critical fixes in production, based on main. This branch is used for fixing issues on the master branch. Is employed for quickly fix critical issues and for urgent bugs that can not wait until the next release cycle. For example, Security vulnerabilities.
+
+    - Release Branch
+      - Is used to stabilize the codebase before deploying to production. Allows to do things like this ones:
+        - Freeze development for the current sprint/release cycle.
+        - Perform final QA, bug fixing, and versioning.
+        - Continue development of new features in parallel (in develop).
+    
+    - Develop Branch
+      - Is the central integration branch for all new code that’s being prepared for the next release. Is where all the developers work on and all the features are merged once they are done. Is where the lastest stable development version of the software lives in.
+    
+    - Feature Branch
+      - Is used to develop a single feature or improvement in isolation. Isolated from develop until the feature is complete. Focused on a specific goal or story. Temporary: deleted after being merged into develop.
+
+      GitFlow Image
+
+
+- Other things that are going to be employ for Maintainability during development are the following:
+
+
+- Pull Requests (PRs): All code must be integrated into develop or main exclusively through Pull Requests. Each PR must be reviewed and approved by at least one team member before merging.
+
+- Release Process: Production releases will be carried out on a scheduled basis every two weeks (sprint cycle), merging the develop branch into main after successful validation in the staging environment.
+
+- Hotfix Process: Critical fixes (hotfixes) will be developed in their own branch (hotfix/) based on main. Once approved, they will be merged into both main (for immediate deployment) and develop (to prevent regressions).
+
+#### 3.6.2 Post-Development Support
+
+A tiered support model (L1, L2, L3) is established to manage incidents and inquiries:
+
+- Level 1 (L1 – Basic Support):
+
+  - Channel: User manuals, tutorial videos, and an RAG (Retrieval-Augmented Generation) system via WhatsApp for common questions.
+
+  - Objective: Self-service and resolution of frequent doubts.
+
+- Level 2 (L2 – Technical Support):
+
+  - Channel: Email (support@promptsales.com).
+
+  - Response Time (Service Level Agreement): Acknowledgment between 8 and 12 business hours.
+
+  - Resolution Time (Service Level Agreement): Incident resolution between 4 and 7 business days.
+
+- Level 3 (L3 – Specialized Support):
+
+  - Channel: Internal issue tracking system (e.g., Trello or GitHub Issues), escalated from L2.
+
+  - Objective: Resolution of complex bugs, infrastructure failures, or integration problems requiring development team intervention.
 
 ### 3.7 Interoperability
-To ensure the different PromptSales modules (Ads, Content, and CRM) work in an integrated manner and can connect with external services, we have decided to use REST APIs as our primary communication method.
+To ensure that the PromptSales modules (Ads, Content, and CRM) operate in an integrated manner and can connect with external services, we have chosen REST APIs as our primary communication method.
 
-We will use this approach for all communication between the services and for managing automation processes. When designing our APIs, we will follow RESTful principles, such as using cache to optimize interactions and make the platform faster.
+This approach will be used for all communication between services built with Flask and FastAPI, as well as for managing automation processes.
+When designing our APIs, we will follow RESTful principles, including the use of Redis caching to optimize interactions and improve platform performance, in line with performance requirements.
 
-Finally, for the specialized communication between the various AI services, which have different requirements, we are reserving the use of MCP servers (Message Oriented Middleware Communication Protocols).
+Finally, for specialized communication among various AI services (which have different requirements), the use of MCP (Model Context Protocol) servers will be reserved.
 ### 3.8 Compliance
+
+The system will be designed in accordance with international standards for security and data protection:
+
+#### Payment Management
+
+All credit card, transfer, or monetary transaction data will not be stored in our systems. These operations will be fully delegated to third-party payment gateways that comply with PCI DSS certification.
+
+#### Application Security
+
+- Web applications (Vercel) will follow the OWASP Top 10 2.0 recommendations.
+
+- Backend services (REST APIs in Flask/FastAPI) will be developed mitigating OWASP Top 10 3.x vulnerabilities, with particular emphasis on access control (OAuth 2.0) and data injection.
+
+#### Data Protection (GDPR/CCPA)
+
+- Encryption of sensitive data at rest (AES-256) and in transit (TLS 1.3).
+- Implementation of the least privilege principle (minimum necessary access).
+- Mechanisms for user consent management and the right to be forgotten.
 
 ### 3.9 Extensibility
 Design choices have been made to guarantee the extensibility of the system across its lifetime. In this section, design patterns and other tools are discussed to demonstrate their ability to expand the application.
