@@ -34,121 +34,123 @@ This project will be executed through three iterations.
 ## 3. Metrics for non-functional requirements
 
 ### 3.1 Performance
-El software quie vamos a usar para crear el proyecto son:
 
-#### Lenguaje de programacion
+The software stack that will be used to build the project is as follows:
+
+#### Programming Language
 - Python
 
-#### Gestor de base de datos
+#### Database Management System
 - SQL Server
 
-#### Interfaz para conectar sistemas
-- APIs Rest
+#### Interface for System Integration
+- REST APIs
 
-#### Framework para crear APIs
-- FastAPI (compatible con el lenguaje Python)
+#### API Framework
+- FastAPI (compatible with Python)
 
-### Almacen de datos en memoria
+### In-Memory Data Store
 - Redis
 
-El objetivo del rendimiento para el proyecto son los siguientes:
-- Tener un promedio de respuesta en el portal web debe ser de < 2.5 segundos por operacion.
-- Las consultas tiene que entregar resultados en menos de 400 milisegundos mediante Redis.
-- Los procesos de generacion automatica deben ejecutarse en menos de 7 segundos para solicitudes simples y menos de 20 segundos para ejecuciones complejas
+The performance objectives for the project are:
 
-Buscando Benchmarks que usen el software de nosotros y con objetivos de rendimiento se encuentran los siguientes
+- The average response time of the web portal should be **less than 2.5 seconds** per operation.  
+- Queries must deliver results in **under 400 milliseconds** when using Redis.  
+- Automated generation processes must complete in **under 7 seconds** for simple requests and **under 20 seconds** for complex executions.
 
-#### FastApi + Python 
-[Benchmark FastApi + Python](https://sharkbench.dev/web/python-fastapi)
+By searching for benchmarks that use the same software stack and performance goals, we found the following:
 
-El hardware que ellos usan es el siguiente:
+#### FastAPI + Python
+[FastAPI + Python Benchmark](https://sharkbench.dev/web/python-fastapi)
 
-**OS:** Linux/Docker
-**CPU:** Ryzen 7 7800X3D
+**Hardware used in the benchmark:**
+- **OS:** Linux/Docker  
+- **CPU:** Ryzen 7 7800X3D  
 
-Y sus resultados son los siguientes:
+**Results:**
 
 ![FastApi](img/FastApiBenchmark.jpg)
 
-El cual nos dice que RPS (request per second) es de **1185** con latencia de **21.0 ms** y usando de memoria **41.2 MB**.
+According to the benchmark, the **RPS (requests per second)** is **1185**, with a **latency of 21.0 ms** and **memory usage of 41.2 MB**.
 
 #### SQL Server + Python
-[Benchmark SQL Server + Python](https://devblogs.microsoft.com/python/mssql-python-vs-pyodbc-benchmarking-sql-server-performance/?utm_source=chatgpt.com)
+[SQL Server + Python Benchmark](https://devblogs.microsoft.com/python/mssql-python-vs-pyodbc-benchmarking-sql-server-performance/?utm_source=chatgpt.com)
 
-Que dicho Benchmark nos habla sobre el controlador para conectar aplicaciones Python con base de datos SQL.
+This benchmark evaluates the performance of Python drivers connecting to SQL Server databases.
 
-El hardware que ellos usan es el siguiente:
+**Hardware used in the benchmark:**
+- **OS:** Windows 11 Pro  
+- **CPU:** Intel Core i7 (12th Gen)  
+- **RAM:** 32 GB  
+- **Database:** Azure SQL Database - 1 vCore  
+- **Storage:** 32 GB  
 
-**OS:** Windows 11 Pro
-**CPU:** Intel Core i7 (12th Gen)
-**RAM:** 32 GB
-**Database:** Azure SQL Database - VCores 1
-**Storage:** 32 GB
-
-Y este es un resumen del rendimiento:
+**Performance Summary:**
 
 ![mssql](img/mssqlPython.jpg)
 
-Y estos son los tiempos que usaron cuando ejecutaron alguna operacion:
+**Execution Times:**
 
 ![operationSQL](img/operationSQL.png)
 
-Ahora con dicha informacion la extrapolamos con el software y performance de nuestro proyecto:
+Now, extrapolating this data to our project’s software and performance targets:
 
-#### RQS (request per second)
+#### RQS (Requests per Second)
 
-- Total RPS = 1,667
+- Total RPS = **1,667**  
+- Cache hits = **0.5 × 1,667 = 833 RPS**  
+- DB writes = **0.30 × 1,667 = 500 RPS**  
+- DB reads = **0.20 × 1,667 = 334 RPS**  
+- Total database operations ≈ **834 RPS (500 + 334)**  
 
-- Cache hits = 0.5 × 1,667 = 833 RPS
+#### Pods for FastAPI
 
-- DB writes = 0.30 × 1,667 = 500 RPS
+For database-bound operations, we use the following formula:
 
-- DB reads = 0.20 × 1,667 = 334 RPS
+$$
+pods_{db} = ⌈\frac{834\ (RPS)}{300\ (processes)}⌉ = 3\ pods
+$$
 
-- Total operaciones que tocan DB ≈ 834 RPS (500 + 334)
+#### Database Sizing (vCores)
 
-#### Pods que vamos a usar para FastAPI
+- Required DB TPS ≈ **834 TPS (transactions per second)**  
+- Assuming **100 TPS per vCore**, the formula is:  
 
-Para el DB-Bound vamos a usar la siguien formula:
+$$
+vCores = ⌈\frac{834\ (RPS)}{100\ (TPS)}}⌉ = 9\ vCores
+$$
 
-> pods_db = ⌈834(RPS)/300(procesos)⌉ = 3pods
-
-#### Dimensiones de la base de datos (vCores)
-
-- DB TPS requerido ≈ 834 TPS(transaction per second).
-- Pensamos que es 100 TPS/vsCore esta seria la formula 
-
-> vCores = ⌈834(RPS)/100(TPS)⌉ = 9vCores
-
-**Nota:** Se usara Azure SQL Business Critical para tener una menos latencia
+**Note:** Azure SQL **Business Critical** will be used to minimize latency.
 
 #### Redis
 
-Para tener la latencia a menos de 400 ms se y sabemos que los cache hits son: 833RPS * 2 ≈ 1700 ops(operation per second)
+To maintain latency below **400 ms**, and given that cache hits ≈ **833 RPS × 2 ≈ 1700 ops (operations per second)**:
 
-**Nota:** Se usara Azure Cache for Redis con capacidad para ≥5k ops/s y latencia < 10 ms para garantizar los ≤ 400 ms
+**Note:** Azure **Cache for Redis** will be used, with capacity ≥ **5k ops/s** and latency **< 10 ms** to guarantee ≤ **400 ms** response times.
 
-#### IA generation
+#### AI Generation
 
-Para la IA lo pensamos asi IA RPS ≈ 83.
-Lo cual el promedio de ejecucion: (simple + complejo) ≈ 5.4 s → concurrencia requerida ≈ 83 × 5.4 ≈ 448 tareas concurrentes.
+For AI workloads, we estimate **AI RPS ≈ 83**.  
+Average execution time: **(simple + complex) ≈ 5.4 s**, thus:  
+**Required concurrency ≈ 83 × 5.4 ≈ 448 concurrent tasks.**
 
-**Nota:** Se usara Azure OpenAI para asegurar tiempos <7s / <20s 
+**Note:** Azure **OpenAI Service** will be used to ensure processing times of **<7s / <20s**.
 
-#### Almacenamiento
+#### Storage
 
-La formula sera la siguiente:
+The formula for storage estimation is:
 
 $$
-GB_{por\_día} = \frac{PPM \times bytes/prompt}{1024^2} \times 60
+GB_{per\_day} = \frac{PPM \times bytes/prompt}{1024^2} \times 60
 $$
 
-- PPM = prompts por minuto
-- bytes/prompt = tamaño promedio de cada prompt
-- 1024^2 = bytes a megabytes
-- 60 = minutos a horas
+Where:
+- **PPM** = prompts per minute  
+- **bytes/prompt** = average prompt size  
+- **1024²** = bytes to megabytes conversion  
+- **60** = minutes to hours conversion  
 
-**Nota:** Se usara Azure Blob Storage para guardar dicha informacion
+**Note:** Azure **Blob Storage** will be used to store this information.
 
 ### 3.2 Scalability
 To transform PromptSales into a highly scalable system, we will use Azure Kubernetes Service (AKS). Additionally, Azure SQL Database will assure horizontal scaling capabilities in all the databases.
