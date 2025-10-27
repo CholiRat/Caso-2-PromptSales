@@ -157,7 +157,7 @@ To transform PromptSales into a highly scalable system, we will use Azure Kubern
 
 The Kubernetes network, managed by AKS, is responsible for dynamically scaling the stateless application pods and the Redis cache. 
 
-The Redis cache is configured for automatic scaling using a Horizontal Pod Autoscaler (HPA) with a range of X to Y replicas. According to the established amount in the performance section.
+The Redis cache is configured for automatic scaling using a Horizontal Pod Autoscaler (HPA) with a range of 2 to 5 replicas.
 
 Here is the HPA file that demonstrates scalability with the cache:
 ```yaml
@@ -172,22 +172,22 @@ spec:
     kind: Deployment
     name: redis-deployment
   minReplicas: 2
-  maxReplicas: 10
+  maxReplicas: 5
   metrics:
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 70		# The autoscale will take place when more than 70% of a pod's cpu is being used
+          averageUtilization: 80		# The autoscale will take place when more than 70% of a pod's cpu is being used
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 75		# The autoscale will take place when more than 75% of a pod's memory is being used
+          averageUtilization: 85		# The autoscale will take place when more than 75% of a pod's memory is being used
 ```
-It declares a minimum of X replicas and maximum of Y. The scale takes place when more than 70% of CPU is being consumed in one pod or 75% of memory is being used instead.
+It declares a minimum of X replicas and maximum of Y. The scale takes place when more than 80% of CPU is being consumed in one pod or 85% of memory is being used instead. These are high values that assure better balancing through the pods.
 
 All scaling rules and pod configurations are defined and managed through declarative YAML files.
 
@@ -200,9 +200,9 @@ For the databases, scalability is managed directly by Azure SQL Database. This p
 
 For more information check the oficial documentation: [Elastic scale - Azure SQL Database | Microsoft Learn](https://learn.microsoft.com/es-es/azure/azure-sql/database/elastic-scale-introduction?view=azuresql)
 
-To meet the requirement of handling 100,000 transactions, the data will be partitioned across X sharded set of databases. This is according to the data retrieved from the perfomance benchmarks
--	Number of Shards: The system will be configured with X shards. 
--	Data Distribution: Information will be partitioned into X distinct parts using a hash function over the campaignIDs. In this way, distribution is balanced according to the amount of campaigns in the system.
+To meet the requirement of handling 100,000 transactions, the data will be partitioned across 3 sharded set of databases. This is according to the data retrieved from the perfomance benchmarks
+-	Number of Shards: The system will be configured with 3 shards.
+-	Data Distribution: Information will be partitioned into 3 distinct parts using a hash function over the campaignIDs. In this way, distribution is balanced according to the amount of campaigns in the system.
 
 To give a better understanding of the architecture, a diagram is provided:
 ![DiagramScalability](img/diagrama-scalability.png)
