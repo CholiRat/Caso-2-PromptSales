@@ -238,8 +238,6 @@ For the data layer, high availability is achieved using the **Geo-Replication** 
 - Real-time Replication: A constant, synchronized replica of each primary database is maintained in a secondary geographic region (West Europe) which is constantly being synced with the primary region. This ensures data is duplicated in near real-time, protecting against High availability disaster recovery.
 - Automatic Failover: In the event of an outage in the primary region (US), Azure automatically redirects all connections to the secondary database without manual intervention. This failover process takes less than 25 seconds, guaranteeing high availability. Once the primary region is restored, connections are moved back.
 
-
-
 The connection endpoints for this configuration are managed within the cluster via a ConfigMap:
 ```yaml
 apiVersion: v1
@@ -262,38 +260,47 @@ data:
   PROMPTCONTENT_DB_SECONDARY: "promptcontent-db-westeurope.database.windows.net"
   PROMPTCRM_DB_SECONDARY: "promptcrm-db-westeurope.database.windows.net"
 ```
+Check the [azure configuration for sql databases](kubernetConfig/azure-config.yaml)
+
 For more information about Geo-replication, visit: [Active-Geo-replication](https://learn.microsoft.com/en-us/azure/azure-sql/database/active-geo-replication-configure-portal?view=azuresql&tabs=portal)
 
 On another note, AKS will assure replication and failover using K8s a LoadBalancer and HPA.
 
 Kubernetes automatically maintains the desired number of application pod replicas as defined in the Horizontal Pod Autoscaler (HPA). If a pod fails, Kubernetes immediately restarts it or schedules a new one.
 
-This is a section of the HPA file for Redis
+This is a section of the HPA file for the promptads backend
 ```yaml
-  scaleTargetRef:				# This file targets the deployment of redis.
+  scaleTargetRef:				# This file targets the deployment of promptads.
     apiVersion: apps/v1
     kind: Deployment
-    name: redis-deployment
-  minReplicas: 2	 
-  maxReplicas: 10
+    name: promptads-deployment
+  minReplicas: 3
+  maxReplicas: 30	
 ```
+Check the [HPA.yaml](kubernetConfig/prompt-ads/deployment.yaml) file for promptads.
+
 With the LoadBalancer type service, the application efficiently distributes incoming network requests across all available, healthy application pods.
 ```yaml
-# The service file establishes the point of connection for redis in our kubernet
+# NAMESPACE: promptsales-app
+# The service file establishes the point of connection for promptsales in our kubernet
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-service
-  namespace: redis-cache
+  name: promptsales-service
+  namespace: promptsales-app
 spec:
-  type: LoadBalancer		# Regulates the traffic between the multiple pods replicas
+  type: LoadBalancer		# Balances the requests between different replicas
   selector:
-    app: redis-cache
+    app: promptsales-app
   ports:
-    - port: 6379 		# The default port on redis
-      targetPort: 6379
+    - protocol: TCP
+      port: 80                    
+      targetPort: 8080      
 ```
+
+Check the [service.yaml](kubernetConfig/prompt-sales/service.yaml) file for promptads.
+
 #### Service Level Agreement (SLA)
 Azure guarantees 99.95% availability for their SQL Database services, which forms the foundation of our high-availability architecture.
 Assuming a 31 day month, this means:
