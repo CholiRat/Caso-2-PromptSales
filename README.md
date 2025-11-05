@@ -155,39 +155,44 @@ Where:
 ### 3.2 Scalability
 To transform PromptSales into a highly scalable system, we will use Azure Kubernetes Service (AKS). Additionally, Azure SQL Database will assure horizontal scaling capabilities in all the databases.
 
-The Kubernetes network, managed by AKS, is responsible for dynamically scaling the stateless application pods and the Redis cache. 
+The Kubernetes network, managed by AKS, is responsible for dynamically scaling the stateless application pods.
 
-The Redis cache is configured for automatic scaling using a Horizontal Pod Autoscaler (HPA) with a range of 2 to 5 replicas.
+Based on the benchmark results in section 3.1, the databases require a minimum of 3 pods to handle the expected load. To meet this requirement, the deployments use a Horizontal Pod Autoscaler (HPA) that dynamically adjusts the number of replicas up to 30, providing up to 10x capacity as demand increases.
 
-Here is the HPA file that demonstrates scalability with the cache:
+Here is the HPA file that demonstrates scalability:
+
 ```yaml
+# NAMESPACE: promptads-app
+# This HorizontalPodAutoscaler (HPA) file fulfills the goal of scalability in the system.
+
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: redis-hpa
-  namespace: redis-cache
+  name: promptads-hpa
+  namespace: promptads-app
 spec:
-  scaleTargetRef:				# This file targets the deployment of redis.
+  scaleTargetRef:				# This file targets the deployment of promptads.
     apiVersion: apps/v1
     kind: Deployment
-    name: redis-deployment
-  minReplicas: 2
-  maxReplicas: 5
+    name: promptads-deployment
+  minReplicas: 3
+  maxReplicas: 30				# x10 the scale
   metrics:
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 80		# The autoscale will take place when more than 70% of a pod's cpu is being used
+          averageUtilization: 80		# The autoscale will take place when more than 80% of a pod's cpu is being used
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 85		# The autoscale will take place when more than 75% of a pod's memory is being used
+          averageUtilization: 85		# The autoscale will take place when more than 85% of a pod's memory is being used
+
 ```
-It declares a minimum of X replicas and maximum of Y. The scale takes place when more than 80% of CPU is being consumed in one pod or 85% of memory is being used instead. These are high values that assure better balancing through the pods.
+It declares a minimum of 3 replicas and maximum of 30. The scale takes place when more than 80% of CPU is being consumed in one pod or 85% of memory is being used instead. These are high values that assure better balancing through the pods.
 
 All scaling rules and pod configurations are defined and managed through declarative YAML files.
 
@@ -203,9 +208,6 @@ For more information check the oficial documentation: [Elastic scale - Azure SQL
 To meet the requirement of handling 100,000 transactions, the data will be partitioned across 3 sharded set of databases. This is according to the data retrieved from the perfomance benchmarks
 -	Number of Shards: The system will be configured with 3 shards.
 -	Data Distribution: Information will be partitioned into 3 distinct parts using a hash function over the campaignIDs. In this way, distribution is balanced according to the amount of campaigns in the system.
-
-To give a better understanding of the architecture, a diagram is provided:
-![DiagramScalability](img/diagrama-scalability.png)
 
 ### 3.3 Reliability
 
