@@ -1,0 +1,16 @@
+# NAMESPACE: promptcrm-app
+# The service file establishes the point of connection for promptcontent in our kubernet
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: promptcrm-service
+  namespace: promptcrm-app
+spec:
+  type: LoadBalancer		# Balances the requests between different replicas
+  selector:
+    app: promptcrm-app
+  ports:
+    - protocol: TCP
+      port: 80                    
+      targetPort: 8083      

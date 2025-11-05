@@ -1,0 +1,28 @@
+# NAMESPACE: promptads-app
+# This HorizontalPodAutoscaler (HPA) file fulfills the goal of scalability in the system.
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: promptads-hpa
+  namespace: promptads-app
+spec:
+  scaleTargetRef:				# This file targets the deployment of promptads.
+    apiVersion: apps/v1
+    kind: Deployment
+    name: promptads-deployment
+  minReplicas: 3
+  maxReplicas: 30				# x10 the scale
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70		# The autoscale will take place when more than 70% of a pod's cpu is being used
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 75		# The autoscale will take place when more than 75% of a pod's memory is being used

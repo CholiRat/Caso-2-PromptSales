@@ -1,4 +1,4 @@
-# This is a configuration file that establishes how scalability and availability Will be managed through aks services.
+# This is a configuration file that establishes how scalability and availability will be managed through azure services.
 # We establish main regions and secondary regions to assure different connection points.
 # The endpoints are placeholders. These must be changed when the app is deployed in azure.
 
@@ -9,11 +9,11 @@ metadata:
   namespace: default
 data:
   # Primary regions
-  AZURE_PRIMARY_REGION: "US"
-  PROMPTSALES_DB_PRIMARY: "promptsales-db-us.database.windows.net"
-  PROMPTADS_DB_PRIMARY: "promptads-db-us.database.windows.net"
-  PROMPTCONTENT_DB_PRIMARY: "promptcontent-db-us.database.windows.net"
-  PROMPTCRM_DB_PRIMARY: "promptcrm-db-us.database.windows.net"
+  AZURE_PRIMARY_REGION: "East US 2"
+  PROMPTSALES_DB_PRIMARY: "promptsales-db-eastus2.database.windows.net"
+  PROMPTADS_DB_PRIMARY: "promptads-db-eastus2.database.windows.net"
+  PROMPTCONTENT_DB_PRIMARY: "promptcontent-db-eastus2.database.windows.net"
+  PROMPTCRM_DB_PRIMARY: "promptcrm-db-eastus2.database.windows.net"
   
   # Secondary regions
   AZURE_SECONDARY_REGION: "West Europe" 

@@ -1,0 +1,16 @@
+# NAMESPACE: promptads-app
+# The service file establishes the point of connection for promptads in our kubernet
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: promptads-service
+  namespace: promptads-app
+spec:
+  type: LoadBalancer		# Balances the requests between different replicas
+  selector:
+    app: promptads-app
+  ports:
+    - protocol: TCP
+      port: 80                    
+      targetPort: 8082      

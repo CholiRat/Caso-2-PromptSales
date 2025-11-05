@@ -1,0 +1,16 @@
+# NAMESPACE: promptsales-app
+# The service file establishes the point of connection for promptsales in our kubernet
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: promptsales-service
+  namespace: promptsales-app
+spec:
+  type: LoadBalancer		# Balances the requests between different replicas
+  selector:
+    app: promptsales-app
+  ports:
+    - protocol: TCP
+      port: 80                    
+      targetPort: 8080      

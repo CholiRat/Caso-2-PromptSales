@@ -1,0 +1,47 @@
+# NAMESPACE: promptsales-app
+# This pod contains the deployment for the backend of promptsales.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: promptsales-deployment
+  namespace: promptsales-app
+spec:
+  replicas: 3		 	# This number gets overwritten in the hpa.file		
+  selector:
+    matchLabels:
+      app: promptsales-app
+  template:
+    metadata:
+      labels:
+        app: promptsales-app
+    spec:
+      containers:
+      - name: promptsales-api
+        image: promptsales-app:latest	# Image for the deployment
+        ports:
+          - containerPort: 8080
+        env:
+        - name: DATABASE_SERVER
+          value: "prompt-sales.database.windows.net"  
+        - name: DATABASE_USER
+          value: "azureuser"     
+        - name: DATABASE_PASSWORD		# Passwords are saved in a separated secrets file to ensure security
+          valueFrom:
+            secretKeyRef:
+              name: promptsales-secret
+              key: DATABASE_PASSWORD
+        - name: REDIS_SERVER
+          value: "redis-cache.database.windows.net"  
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: promptsales-secret
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "2Gi"		# The minimum amount of cpu and memory for promptads-app containers.
+            cpu: "500m"
+          limits:
+            memory: "4Gi"		# The maximum amount of cpu and memory for promptads-app containers.
+            cpu: "2000m"

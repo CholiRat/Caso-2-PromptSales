@@ -1,0 +1,16 @@
+# NAMESPACE: promptcontent-app
+# The service file establishes the point of connection for promptcontent in our kubernet
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: promptcontent-service
+  namespace: promptcontent-app
+spec:
+  type: LoadBalancer		# Balances the requests between different replicas
+  selector:
+    app: promptcontent-app
+  ports:
+    - protocol: TCP
+      port: 80                    
+      targetPort: 8081      

@@ -1,4 +1,24 @@
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: promptads-app
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: promptcontent-app
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: promptcrm-app
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: promptsales-app
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: redis-cache

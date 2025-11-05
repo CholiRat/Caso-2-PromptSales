@@ -1,0 +1,47 @@
+# NAMESPACE: promptads-app
+# This pod contains the deployment for the backend of promptads.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: promptads-deployment
+  namespace: promptads-app
+spec:
+  replicas: 3		 	# This number gets overwritten in the hpa.file		
+  selector:
+    matchLabels:
+      app: promptads-app
+  template:
+    metadata:
+      labels:
+        app: promptads-app
+    spec:
+      containers:
+      - name: promptads-api
+        image: promptads-app:latest	# Image for the deployment
+        ports:
+          - containerPort: 8082
+        env:
+        - name: DATABASE_SERVER
+          value: "prompt-ads.database.windows.net"  
+        - name: DATABASE_USER
+          value: "azureuser"     
+        - name: DATABASE_PASSWORD		# Passwords are saved in a separated secrets file to ensure security
+          valueFrom:
+            secretKeyRef:
+              name: promptads-secret
+              key: DATABASE_PASSWORD
+        - name: REDIS_SERVER
+          value: "redis-cache.database.windows.net"  
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: promptads-secret
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "2Gi"		# The minimum amount of cpu and memory for promptads-app containers.
+            cpu: "500m"
+          limits:
+            memory: "4Gi"		# The maximum amount of cpu and memory for promptads-app containers.
+            cpu: "2000m"

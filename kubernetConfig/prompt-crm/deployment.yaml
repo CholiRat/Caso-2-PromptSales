@@ -1,0 +1,47 @@
+# NAMESPACE: promptcrm-app
+# This pod contains the deployment for the backend of promptcrm.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: promptcrm-deployment
+  namespace: promptcrm-app
+spec:
+  replicas: 3		 	# This number gets overwritten in the hpa.file		
+  selector:
+    matchLabels:
+      app: promptcrm-app
+  template:
+    metadata:
+      labels:
+        app: promptcrm-app
+    spec:
+      containers:
+      - name: promptcrm-api
+        image: promptcrm-app:latest	# Image for the deployment
+        ports:
+          - containerPort: 8083
+        env:
+        - name: DATABASE_SERVER
+          value: "prompt-crm.database.windows.net"  
+        - name: DATABASE_USER
+          value: "azureuser"     
+        - name: DATABASE_PASSWORD		# Passwords are saved in a separated secrets file to ensure security
+          valueFrom:
+            secretKeyRef:
+              name: promptcrm-secret
+              key: DATABASE_PASSWORD
+        - name: REDIS_SERVER
+          value: "redis-cache.database.windows.net"  
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: promptcrm-secret
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "2Gi"		# The minimum amount of cpu and memory for promptcrm-app containers.
+            cpu: "500m"
+          limits:
+            memory: "4Gi"		# The maximum amount of cpu and memory for promptcrm-app containers.
+            cpu: "2000m"
