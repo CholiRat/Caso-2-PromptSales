@@ -338,6 +338,13 @@ This means that while the Azure platform collectively experiences 95.976 minutes
 
 The system achieves **99.985% monthly availability**, comfortably meeting the standards for this requirement.
 
+Consulted links:
+- [Azure SQL Database SLA](https://learn.microsoft.com/en-us/azure/azure-sql/database/business-continuity-high-availability-disaster-recover-hadr-overview?view=azuresql)
+- [Azure Cosmos DB SLA](https://www.azure.cn/en-us/support/sla/cosmos-db)
+- [Azure Cache for Redis SLA](https://www.azure.cn/en-us/support/sla/cache)
+- [AKS SLA]( https://www-azure-cn.translate.goog/en-us/support/sla/kubernetes-service/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc)
+
+
 ### 3.5 Security
 
 Confidentiality, integrity, and availability of user and transaction data in the PromptSales system must be guaranteed.  
