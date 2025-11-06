@@ -234,11 +234,15 @@ All detailed diagnostic information will be stored in **Azure Log Analytics Work
 #### Failover and replication
 To ensure system resilience, high availability is implemented across both the databases and application using a combination of Azure SQL databases and AKS.
 
-For the data layer, high availability is achieved using the **Geo-Replication** feature of Azure SQL Database (PaaS). This service is configured for every database shard (PromptSales, PromptAds, PromptContent, PromptCRM) and provides two critical functions:
+For the data layer, high availability is achieved using the **Geo-Replication** feature of Azure SQL Database (PaaS). This service is configured for every database shard (PromptSales, PromptAds, PromptCRM) and provides two critical functions:
 - Real-time Replication: A constant, synchronized replica of each primary database is maintained in a secondary geographic region (West Europe) which is constantly being synced with the primary region. This ensures data is duplicated in near real-time, protecting against High availability disaster recovery.
 - Automatic Failover: In the event of an outage in the primary region (US), Azure automatically redirects all connections to the secondary database without manual intervention. This failover process takes less than 25 seconds, guaranteeing high availability. Once the primary region is restored, connections are moved back.
 
-The connection endpoints for this configuration are managed within the cluster via a ConfigMap:
+In the case of the documental database PromptContent, Azure Cosmos DB includes:
+- Real-time Global Replication: A synchronized replica of the database is automatically maintained in all configured Azure regions.
+- Automatic Failover: In the event of an outage in one region, Azure Cosmos DB automatically redirects all connections to the next available region without manual intervention.
+
+The connection endpoints for these configurations are managed within the cluster via a ConfigMap:
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -263,6 +267,10 @@ data:
 Check the [azure configuration for sql databases](kubernetConfig/azure-config.yaml)
 
 For more information about Geo-replication, visit: [Active-Geo-replication](https://learn.microsoft.com/en-us/azure/azure-sql/database/active-geo-replication-configure-portal?view=azuresql&tabs=portal)
+
+For information about replication in Azure Cosmos DB visit: [Distribute your data globally with Azure Cosmos DB](https://learn.microsoft.com/en-us/azure/cosmos-db/distribute-data-globally)
+
+
 
 On another note, AKS will assure replication and failover using K8s a LoadBalancer and HPA.
 
@@ -299,15 +307,15 @@ spec:
       targetPort: 8080      
 ```
 
-Check the [service.yaml](kubernetConfig/prompt-sales/service.yaml) file for promptads.
+Check the [service.yaml](kubernetConfig/prompt-sales/service.yaml) file for promptsales.
 
-#### Service Level Agreement (SLA)
+#### Downtimes
 Azure guarantees 99.95% availability for their SQL Database services, which forms the foundation of our high-availability architecture.
 Assuming a 31 day month, this means:
 -	Total minutes in month: 44,640 min
 -	Available minutes per Azure SLA: 44,617.68 min
 -	Azure SLA downtime allowance: 22.32 min
-#### Failover considerations
+
 According to Azure documentation, databases are down for up to 25 seconds while the regions are being switched. For this calculation, we assume the worst scenario, 25 seconds of downtime.
 - Assumed fail frequency: 2 times per day through all Prompt Sales services
 - Daily downtime: 50 seconds (2 × 25 seconds)
