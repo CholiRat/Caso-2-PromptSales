@@ -270,7 +270,7 @@ For more information about Geo-replication, visit: [Active-Geo-replication](http
 
 For information about replication in Azure Cosmos DB visit: [Distribute your data globally with Azure Cosmos DB](https://learn.microsoft.com/en-us/azure/cosmos-db/distribute-data-globally)
 
-
+---
 
 On another note, AKS will assure replication and failover using K8s a LoadBalancer and HPA.
 
