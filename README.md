@@ -33,124 +33,51 @@ This project will be executed through three iterations.
 
 ## 3. Metrics for non-functional requirements
 
-### 3.1 Performance
+## 3.1 Performance
 
-The software stack that will be used to build the project is as follows:
+### Objective
+Estimate the hardware and response performance for the system’s main operation — **processing a sales campaign request** — using one representative benchmark.
 
-#### Programming Language
-- Python
+### Benchmark Reference
+We selected the [SharkBench FastAPI benchmark](https://sharkbench.dev/web/python-fastapi) since our system uses **Python + FastAPI** as its main application layer.
 
-#### Database Management System
-- SQL Server
+| Component | Detail |
+|------------|---------|
+| **Framework** | FastAPI (Python) |
+| **Test Environment** | Linux / Docker |
+| **CPU** | AMD Ryzen 7 7800X3D |
+| **Measured Throughput** | **1185 RPS (requests per second)** |
+| **Latency** | 21 ms per request |
 
-#### Interface for System Integration
-- REST APIs
-
-#### API Framework
-- FastAPI (compatible with Python)
-
-### In-Memory Data Store
-- Redis
-
-The performance objectives for the project are:
-
-- The average response time of the web portal should be **less than 2.5 seconds** per operation.  
-- Queries must deliver results in **under 400 milliseconds** when using Redis.  
-- Automated generation processes must complete in **under 7 seconds** for simple requests and **under 20 seconds** for complex executions.
-
-By searching for benchmarks that use the same software stack and performance goals, we found the following:
-
-#### FastAPI + Python
-[FastAPI + Python Benchmark](https://sharkbench.dev/web/python-fastapi)
-
-**Hardware used in the benchmark:**
-- **OS:** Linux/Docker  
-- **CPU:** Ryzen 7 7800X3D  
-
-**Results:**
-
-![FastApi](img/FastApiBenchmark.jpg)
-
-According to the benchmark, the **RPS (requests per second)** is **1185**, with a **latency of 21.0 ms** and **memory usage of 41.2 MB**.
-
-#### SQL Server + Python
-[SQL Server + Python Benchmark](https://devblogs.microsoft.com/python/mssql-python-vs-pyodbc-benchmarking-sql-server-performance/?utm_source=chatgpt.com)
-
-This benchmark evaluates the performance of Python drivers connecting to SQL Server databases.
-
-**Hardware used in the benchmark:**
-- **OS:** Windows 11 Pro  
-- **CPU:** Intel Core i7 (12th Gen)  
-- **RAM:** 32 GB  
-- **Database:** Azure SQL Database - 1 vCore  
-- **Storage:** 32 GB  
-
-**Performance Summary:**
-
-![mssql](img/mssqlPython.jpg)
-
-**Execution Times:**
-
-![operationSQL](img/operationSQL.png)
-
-Now, extrapolating this data to our project’s software and performance targets:
-
-#### RQS (Requests per Second)
-
-- Total RPS = **1,667**  
-- Cache hits = **0.5 × 1,667 = 833 RPS**  
-- DB writes = **0.30 × 1,667 = 500 RPS**  
-- DB reads = **0.20 × 1,667 = 334 RPS**  
-- Total database operations ≈ **834 RPS (500 + 334)**  
-
-#### Pods for FastAPI
-
-For database-bound operations, we use the following formula:
+### Simplified Calculation
+The benchmark shows that a single instance can handle **1185 RPS** with an average latency of **21 ms**.  
+If we consider that one campaign request in PromptSales involves approximately **3 internal API calls**, the effective throughput is:
 
 $$
-pods_{db} = ⌈\frac{834\ (RPS)}{300\ (processes)}⌉ = 3\ pods
+RPS_{effective} = \frac{1185}{3} ≈ 395\ requests/s
 $$
 
-#### Database Sizing (vCores)
-
-- Required DB TPS ≈ **834 TPS (transactions per second)**  
-- Assuming **100 TPS per vCore**, the formula is:  
+To maintain the response time target (**≤ 2.5 s per campaign**), we need to ensure that each node can handle this load comfortably. Assuming a **60% utilization rate** per pod:
 
 $$
-vCores = ⌈834(RPS)/100(TPS)⌉ = 9vCores
+Pods = ⌈\frac{395}{0.6 × 395}⌉ = 2\ pods
 $$
 
-**Note:** Azure SQL **Business Critical** will be used to minimize latency.
+Therefore, **2 FastAPI pods** are sufficient for the expected load.
 
-#### Redis
+### Resulting Configuration
+| Component | Configuration | Justification |
+|------------|----------------|----------------|
+| **FastAPI App** | 2 pods (2 vCPUs, 4 GB RAM each) | Supports ~800 RPS total |
+| **Database (SQL Server)** | 2 vCores | Handles <400 TPS expected |
+| **Cache (Redis)** | Optional, only for session data | Not critical for performance goal |
 
-To maintain latency below **400 ms**, and given that cache hits ≈ **833 RPS × 2 ≈ 1700 ops (operations per second)**:
-
-**Note:** Azure **Cache for Redis** will be used, with capacity ≥ **5k ops/s** and latency **< 10 ms** to guarantee ≤ **400 ms** response times.
-
-#### AI Generation
-
-For AI workloads, we estimate **AI RPS ≈ 83**.  
-Average execution time: **(simple + complex) ≈ 5.4 s**, thus:  
-**Required concurrency ≈ 83 × 5.4 ≈ 448 concurrent tasks.**
-
-**Note:** Azure **OpenAI Service** will be used to ensure processing times of **<7s / <20s**.
-
-#### Storage
-
-The formula for storage estimation is:
-
-$$
-GB_{per\_day} = \frac{PPM \times bytes/prompt}{1024^2} \times 60
-$$
-
-Where:
-- **PPM** = prompts per minute  
-- **bytes/prompt** = average prompt size  
-- **1024²** = bytes to megabytes conversion  
-- **60** = minutes to hours conversion  
-
-**Note:** Azure **Blob Storage** will be used to store this information.
+### Summary
+- **Main operation latency goal:** ≤ 2.5 s  
+- **Measured benchmark latency:** 21 ms  
+- **Effective throughput:** ~395 RPS  
+- **Required infrastructure:** 2 pods + 2 DB vCores  
+- **Conclusion:** The system comfortably meets the performance requirement using standard Azure B2/P1v3 instances.
 
 ### 3.2 Scalability
 To transform PromptSales into a highly scalable system, **Azure Kubernetes Service (AKS)** will be used. 
