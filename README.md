@@ -153,11 +153,15 @@ Where:
 **Note:** Azure **Blob Storage** will be used to store this information.
 
 ### 3.2 Scalability
-To transform PromptSales into a highly scalable system, we will use Azure Kubernetes Service (AKS). Additionally, Azure SQL Database will assure horizontal scaling capabilities in all the databases.
+To transform PromptSales into a highly scalable system, **Azure Kubernetes Service (AKS)** will be used. 
+
+To assure horizontal scaling capabilities in all the databases, **Azure SQL Database** will be used.
+
+In the case of mongoDB, **Azure Cosmos DB** will be used to create regional replicas and scale the PromptContent database. 
 
 The Kubernetes network, managed by AKS, is responsible for dynamically scaling the stateless application pods.
 
-Based on the benchmark results in section 3.1, the databases require a minimum of 3 pods to handle the expected load. To meet this requirement, the deployments use a Horizontal Pod Autoscaler (HPA) that dynamically adjusts the number of replicas up to 30, providing up to 10x capacity as demand increases.
+Based on the benchmark results in section 3.1, the databases require a **minimum of 3 pods** to handle the expected load. To meet this requirement, the deployments use a Horizontal Pod Autoscaler (HPA) that dynamically adjusts the number of replicas up to 30, providing up to 10x capacity as demand increases.
 
 Here is the HPA file that demonstrates scalability:
 
@@ -192,22 +196,24 @@ spec:
           averageUtilization: 85		# The autoscale will take place when more than 85% of a pod's memory is being used
 
 ```
-It declares a minimum of 3 replicas and maximum of 30. The scale takes place when more than 80% of CPU is being consumed in one pod or 85% of memory is being used instead. These are high values that assure better balancing through the pods.
+It declares a minimum of 3 replicas and maximum of 30. 
+
+The scale takes place when more than 80% of CPU is being consumed in one pod or 85% of memory is being used instead. These are high values that assure better balancing through the pods.
 
 All scaling rules and pod configurations are defined and managed through declarative YAML files.
 
 [Check kubernetes configuration folder]( https://github.com/CholiRat/Caso-2-PromptSales/tree/main/kubernetConfig)
 
-For the databases, scalability is managed directly by Azure SQL Database. This plataform offering provides robust horizontal scaling through two primary mechanisms:
+For the SQL databases, scalability is managed directly by Azure SQL Database. This plataform offering provides robust horizontal scaling through two primary mechanisms:
 
--	Elastic Pools: To efficiently manage performance and cost for multiple databases with variable usage patterns.
--	Sharding with Elastic Database Tools: To distribute data across multiple databases to handle high-volume transactions.
+-	**Elastic Pools**: To efficiently manage performance and cost for multiple databases with variable usage patterns.
+-	**Sharding with Elastic Database Tools**: To distribute data across multiple databases to handle high-volume transactions.
 
 For more information check the oficial documentation: [Elastic scale - Azure SQL Database | Microsoft Learn](https://learn.microsoft.com/es-es/azure/azure-sql/database/elastic-scale-introduction?view=azuresql)
 
 To meet the requirement of handling 100,000 transactions, the data will be partitioned across 3 sharded set of databases. This is according to the data retrieved from the perfomance benchmarks
--	Number of Shards: The system will be configured with 3 shards.
--	Data Distribution: Information will be partitioned into 3 distinct parts using a hash function over the campaignIDs. In this way, distribution is balanced according to the amount of campaigns in the system.
+-	**Number of Shards**: The system will be configured with 3 shards.
+-	**Data Distribution**: Information will be partitioned into 3 distinct parts using a hash function over the campaignIDs. In this way, distribution is balanced according to the amount of campaigns in the system.
 
 ### 3.3 Reliability
 
@@ -226,21 +232,20 @@ The configured alert thresholds are as follows:
 - **Pod restarts > 3 / hour →** instability alert  
 
 If issues persist for more than **10 minutes**, a ticket will automatically be created in **Azure DevOps**.  
-All detailed diagnostic information will be stored in **Azure Log Analytics Workspace**.
 
+All detailed diagnostic information will be stored in **Azure Log Analytics Workspace**.
 
 ### 3.4 Availability
 
-#### Failover and replication
-To ensure system resilience, high availability is implemented across both the databases and application using a combination of Azure SQL databases and AKS.
+To ensure system resilience, high availability is implemented across both the databases and application using a combination of Azure SQL database, Azure Cosmos DB and AKS.
 
 For the data layer, high availability is achieved using the **Geo-Replication** feature of Azure SQL Database (PaaS). This service is configured for every database shard (PromptSales, PromptAds, PromptCRM) and provides two critical functions:
-- Real-time Replication: A constant, synchronized replica of each primary database is maintained in a secondary geographic region (West Europe) which is constantly being synced with the primary region. This ensures data is duplicated in near real-time, protecting against High availability disaster recovery.
-- Automatic Failover: In the event of an outage in the primary region (US), Azure automatically redirects all connections to the secondary database without manual intervention. This failover process takes less than 25 seconds, guaranteeing high availability. Once the primary region is restored, connections are moved back.
+- **Real-time Replication:** A constant, synchronized replica of each primary database is maintained in a secondary geographic region (West Europe) which is constantly being synced with the primary region. This ensures data is duplicated in near real-time, protecting against High availability disaster recovery.
+- **Automatic Failover:** In the event of an outage in the primary region (US), Azure automatically redirects all connections to the secondary database without manual intervention. This failover process takes less than 25 seconds, guaranteeing high availability. Once the primary region is restored, connections are moved back.
 
 In the case of the documental database PromptContent, Azure Cosmos DB includes:
-- Real-time Global Replication: A synchronized replica of the database is automatically maintained in all configured Azure regions.
-- Automatic Failover: In the event of an outage in one region, Azure Cosmos DB automatically redirects all connections to the next available region without manual intervention.
+- **Real-time Global Replication:** A synchronized replica of the database is automatically maintained in all configured Azure regions.
+- **Automatic Failover:** In the event of an outage in one region, Azure Cosmos DB automatically redirects all connections to the next available region without manual intervention.
 
 The connection endpoints for these configurations are managed within the cluster via a ConfigMap:
 ```yaml
@@ -274,7 +279,7 @@ For information about replication in Azure Cosmos DB visit: [Distribute your dat
 
 On another note, AKS will assure replication and failover using K8s a LoadBalancer and HPA.
 
-Kubernetes automatically maintains the desired number of application pod replicas as defined in the Horizontal Pod Autoscaler (HPA). If a pod fails, Kubernetes immediately restarts it or schedules a new one.
+Kubernetes automatically maintains the desired number of application pod replicas as defined in the Horizontal Pod Autoscaler (HPA). If a pod fails, AKS immediately restarts it or schedules a new one.
 
 This is a section of the HPA file for the promptads backend
 ```yaml
