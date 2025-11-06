@@ -315,24 +315,28 @@ spec:
 Check the [service.yaml](kubernetConfig/prompt-sales/service.yaml) file for promptsales.
 
 #### Downtimes
-Azure guarantees 99.95% availability for their SQL Database services, which forms the foundation of our high-availability architecture.
-Assuming a 31 day month, this means:
--	Total minutes in month: 44,640 min
--	Available minutes per Azure SLA: 44,617.68 min
--	Azure SLA downtime allowance: 22.32 min
+Total minutes in a month: 44 640 min
 
-According to Azure documentation, databases are down for up to 25 seconds while the regions are being switched. For this calculation, we assume the worst scenario, 25 seconds of downtime.
-- Assumed fail frequency: 2 times per day through all Prompt Sales services
-- Daily downtime: 50 seconds (2 × 25 seconds)
-- Monthly downtime (31 days): 1,550 seconds (25.833 minutes)
-- Azure infrastructure: 22.32 min
-- Planned failovers: 25.833 min
-- Total downtime: 48.153 min
-- Available total minutes: 44,591.847 min
+| Service                | SLA       | Downtime per Month |
+|------------------------|-----------|---------------------|
+| Azure SQL Database     | 99.995%   | 2.232 min           |
+| Azure Cosmos DB        | 99.99%    | 4.464 min           |
+| Azure Cache for Redis  | 99.9%     | 44.64 min           |
+| Azure Kubernetes Service (AKS) | 99.9%     | 44.64 min           |
 
-Monthly availability: 99.892%
+Total potential downtime by Azure Services: 44.64 + 44.64 + 4.464 + 2.232 = 95.976 min
+Total potential Azure availability: 44544.024 min or 99.785%
 
-The system achieves 99.89% availability, comfortably meeting the standards for this requirement.
+PromptSales mitigates the effects of Azure downtime with these two strategies: 
+- Our 3-30 replicas guarantee that at least one pod is active at any given time, this uptime is approximately 100%. 
+- If Redis fails, the app will redirect the requests to the databases, meaning there should not be downtime provoked by the cache being unavailable. 
+
+The remaining time is 2.232 +  4.464 = 6.696 minutes where PromptSales modules will be down disregarding Azure failures.
+Total PromptSales availability: 44,640 - 6.696 = 44,633.304 min
+
+This means that while the Azure platform collectively experiences 95.976 minutes of potential downtime across all services, **PromptSales only contributes 6.696 minutes of that downtime**.
+
+The system achieves **99.985% monthly availability**, comfortably meeting the standards for this requirement.
 
 ### 3.5 Security
 
