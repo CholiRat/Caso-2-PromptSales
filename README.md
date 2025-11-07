@@ -36,49 +36,54 @@ This project will be executed through three iterations.
 
 ## 3.1 Performance
 
-### Objective
-Estimate the hardware and response performance for the system’s main operation — **processing a sales campaign request** — using one representative benchmark.
+This section estimates the system performance for its **main operation: processing a sales campaign request**.
 
-### Benchmark Reference
-We selected the [SharkBench FastAPI benchmark](https://sharkbench.dev/web/python-fastapi) since our system uses **Python + FastAPI** as its main application layer.
-
-| Component | Detail |
-|------------|---------|
-| **Framework** | FastAPI (Python) |
-| **Test Environment** | Linux / Docker |
-| **CPU** | AMD Ryzen 7 7800X3D |
-| **Measured Throughput** | **1185 RPS (requests per second)** |
-| **Latency** | 21 ms per request |
-
-### Simplified Calculation
-The benchmark shows that a single instance can handle **1185 RPS** with an average latency of **21 ms**.  
-If we consider that one campaign request in PromptSales involves approximately **3 internal API calls**, the effective throughput is:
+We used the [FastAPI (Python) benchmark](https://sharkbench.dev/web/python-fastapi) as reference, which reports **1185 RPS (requests per second)** on a **Ryzen 7 7800X3D CPU** with **21 ms latency**.  
+Our main operation involves approximately **three internal sub-calls**, so the effective throughput per base instance is:
 
 $$
-RPS_{effective} = \frac{1185}{3} ≈ 395\ requests/s
+RPS_{effective} = \frac{1185}{3} \approx 395\ RPS
 $$
 
-To maintain the response time target (**≤ 2.5 s per campaign**), we need to ensure that each node can handle this load comfortably. Assuming a **60% utilization rate** per pod:
+### Hardware adjustment
+
+The project will be deployed on **Azure App Service – Premium v3**, tier **P2v3 (4 vCPUs, 16 GB RAM)**, which provides roughly **2× the compute capacity** of the benchmark environment.
+
+Therefore, the estimated throughput per instance is:
 
 $$
-Pods = ⌈\frac{395}{0.6 × 395}⌉ = 2\ pods
+RPS_{instance} \approx 395 × 2 = 800\ RPS
 $$
 
-Therefore, **2 FastAPI pods** are sufficient for the expected load.
+### Calculation for 100,000 transactions per minute
 
-### Resulting Configuration
-| Component | Configuration | Justification |
-|------------|----------------|----------------|
-| **FastAPI App** | 2 pods (2 vCPUs, 4 GB RAM each) | Supports ~800 RPS total |
-| **Database (SQL Server)** | 2 vCores | Handles <400 TPS expected |
-| **Cache (Redis)** | Optional, only for session data | Not critical for performance goal |
+According to the project requirement, the system must process **100,000 transactions per minute**, which is equivalent to:
 
-### Summary
-- **Main operation latency goal:** ≤ 2.5 s  
-- **Measured benchmark latency:** 21 ms  
-- **Effective throughput:** ~395 RPS  
-- **Required infrastructure:** 2 pods + 2 DB vCores  
-- **Conclusion:** The system comfortably meets the performance requirement using standard Azure B2/P1v3 instances.
+$$
+RPS_{required} = \frac{100,000}{60} \approx 1,667\ RPS
+$$
+
+The number of FastAPI instances required is:
+
+$$
+Instances = \left\lceil \frac{RPS_{required}}{RPS_{instance}} \right\rceil = \left\lceil \frac{1,667}{800} \right\rceil = 3\ instances
+$$
+
+### Final configuration
+
+| Component | Type / SKU | Estimated Throughput | Required Instances | Justification |
+|------------|-------------|----------------------|--------------------|----------------|
+| **FastAPI App** | Azure App Service – P2v3 (4 vCPUs, 16 GB RAM) | 800 RPS | 3 | Meets 100 k TPM with margin |
+| **SQL Server** | 2 vCores | ≤ 400 TPS | 1 | Complementary, not a bottleneck |
+| **Cache (optional)** | Redis Basic | — | 1 | Used for sessions/logs only |
+
+**Conclusion:**  
+With **three App Service P2v3 instances**, the system can handle approximately **100 000 transactions per minute (~1 667 RPS)** while maintaining an average response time below **2.5 seconds per operation**, satisfying the project’s performance requirement.
+
+**Reference sources:**  
+- FastAPI Benchmark – *SharkBench* (1185 RPS, Ryzen 7 7800X3D)  
+- [Microsoft Docs – App Service Premium v3 Specifications](https://learn.microsoft.com/en-us/azure/app-service/app-service-plan-manage)
+
 
 ### 3.2 Scalability
 To transform PromptSales into a highly scalable system, **Azure Kubernetes Service (AKS)** will be used. 
