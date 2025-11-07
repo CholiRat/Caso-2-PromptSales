@@ -5,6 +5,7 @@
 - Alexander Brenes Garita - 2018191805
 - Andrés Baldi Mora - 2024088934
 - Lindsay Nahome Marín Sánchez - 2024163904
+- Javier Rodríguez Menjívar - 2023074732
 ### Course
 Software Design
 ### Delivery dates
