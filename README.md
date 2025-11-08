@@ -516,7 +516,7 @@ The diagram should be read Left-Right, Top-Down
 
 ![Architecture Diagram](img/ArchitectureDesignDiagram.png)
 
-Check the pdf file to gain a better look of this diagram: 
+Check the pdf file to gain a better look of this diagram:
 
 [ArchitectureDesign-Diagram](diagrams/ArchitectureDesignDiagram.pdf)
 
