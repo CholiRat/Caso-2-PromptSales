@@ -506,3 +506,10 @@ The main application PromptSales gains access to Prompt Content, Prompt Ads and 
 
 ![DDD Diagram](img/DomainDrivenDesign.png)
 Check the pdf file to gain a better look of this diagram: [DomainDrivenDesign-Diagram](diagrams/DomainDrivenDesign.pdf)
+
+## 5. Architecture design
+The diagram should be read Left-Right, Top-Down
+
+![Architecture Diagram](img/ArchitectureDesignDiagram.png)
+
+Check the pdf file to gain a better look of this diagram: [ArchitectureDesign-Diagram](diagrams/ArchitectureDesignDiagram.pdf)
