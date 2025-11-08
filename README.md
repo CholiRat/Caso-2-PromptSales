@@ -505,11 +505,15 @@ The following is an image of the Domain Driven Design backend. The frontend comm
 The main application PromptSales gains access to Prompt Content, Prompt Ads and Prompt CRM through the infrastructure layer with a facade. From this point, it uses an ETL approach to obtain data from sub-businesses and syncronize information.
 
 ![DDD Diagram](img/DomainDrivenDesign.png)
-Check the pdf file to gain a better look of this diagram: [DomainDrivenDesign-Diagram](diagrams/DomainDrivenDesign.pdf)
+Check the pdf file to gain a better look of this diagram: 
+[DomainDrivenDesign-Diagram.pdf](diagrams/DomainDrivenDesign.pdf)
+[DDD Lucidchart Diagram (View only)](https://lucid.app/lucidchart/b1efdc09-267e-49df-b0bc-38f27446f985/edit?viewport_loc=-1700%2C-569%2C3333%2C1939%2C0_0&invitationId=inv_0a85b824-b4b4-47a2-8483-7e83877e60e0)
 
 ## 5. Architecture design
 The diagram should be read Left-Right, Top-Down
 
 ![Architecture Diagram](img/ArchitectureDesignDiagram.png)
 
-Check the pdf file to gain a better look of this diagram: [ArchitectureDesign-Diagram](diagrams/ArchitectureDesignDiagram.pdf)
+Check the pdf file to gain a better look of this diagram: 
+[ArchitectureDesign-Diagram](diagrams/ArchitectureDesignDiagram.pdf)
+[Architecture Desing Lucidchart Diagram (View Only)](https://lucid.app/lucidchart/154e8bce-2df7-4d76-9ab9-0257def25d2d/edit?viewport_loc=3136%2C-3144%2C6596%2C3356%2Cm-5o7ONTd-nK&invitationId=inv_8f3e4cd8-0078-4e37-8dc0-21894f54e0b4)
