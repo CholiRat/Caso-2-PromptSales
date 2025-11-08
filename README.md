@@ -11,7 +11,7 @@ Software Design
 ### Delivery dates
 🗓️ First delivery: October 26, 2025
 
-🗓️ Second delivery: November 8, 2025
+🗓️ Second delivery: November 11, 2025
 
 🗓️ Final delivery: November 23, 2025
 
@@ -23,6 +23,59 @@ Caso-2-PromptSales/
 ├── diagrams/
 ├── img/
 ├── kubernetConfig/
+├── src/
+│   └── Domain/
+│       ├── PromptAds/
+│       │   ├── Contracts/
+│       │   │   ├── CampaignContracts/
+│       │   │   └── TargetContracts/
+│       │   ├── Controllers/
+│       │   │   ├── CampaignControllers/
+│       │   │   └── TargetControllers/
+│       │   ├── Infrastructure/
+│       │   │   └── Repositories/
+│       │   └── Services/
+│       │       ├── CampaignServices/
+│       │       └── TargetServices/
+│       ├── PromptCRM/
+│       │   ├── Contracts/
+│       │   │   ├── ClientContracts/
+│       │   │   └── SalesContracts/
+│       │   ├── Controllers/
+│       │   │   ├── ClientControllers/
+│       │   │   └── SalesControllers/
+│       │   ├── Infrastructure/
+│       │   │   └── Repositories/
+│       │   └── Services/
+│       │       ├── ClientServices/
+│       │       └── SalesServices/
+│       ├── PromptContent/
+│       │   ├── Contracts/
+│       │   │   ├── GeneratedContentContracts/
+│       │   │   └── PromptContracts/
+│       │   ├── Controllers/
+│       │   │   ├── GeneratedContentControllers/
+│       │   │   └── PromptControllers/
+│       │   ├── Infrastructure/
+│       │   │   └── Repositories/
+│       │   └── Services/
+│       │       ├── GeneratedContentServices/
+│       │       └── PromptServices/
+│       └── PromptSales/
+│           ├── Contracts/
+│           │   ├── AdContracts/
+│           │   ├── PaymentContracts/
+│           │   └── UserContracts/
+│           ├── Controllers/
+│           │   ├── AdControllers/
+│           │   ├── PaymentControllers/
+│           │   └── UserControllers/
+│           ├── Infrastructure/
+│           │   └── Repositories/
+│           └── Services/
+│               ├── AdServices/
+│               ├── PaymentServices/
+│               └── UserServices/
 └── README.md
 ```
 
