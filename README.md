@@ -80,10 +80,25 @@ Caso-2-PromptSales/
 ```
 
 ## 1. Introduction
-This repository details the design of the application Prompt Sales
+PromptSales is a modular ecosystem composed of three interconnected sub-platforms, each specializing in a distinct phase of the marketing and sales lifecycle.
+- **PromptContent**: For dynamic content generation.
+- **PromptAds**: For targeted advertising campaigns.
+- **PromptCRM**: For customer relationship management and segmentation.
+
+PromptSales is built with RESTful architecture, deployed in a cloud-native environment using Microsoft Azure. To ensure scalability, and availability, all services are containerized and orchestrated via Kubernetes. Communication between services is governed by MCP servers, which facilitate the integration of AI in workflows.
+
+This repository is organized to guide developers and architects through the full lifecycle of PromptSales system design. Use this repository as a reference for building, deploying, and extending the PromptSales ecosystem.
 
 ## 2. Scope
 This project will be executed through three iterations.
+#### First iteration:
+- Details of non functional requirements
+- Benchmarks and strategies implemented to achieve specific metrics
+- Domain driven design
+#### Second iteration:
+- Architecture design
+- Project structure with separation between modules
+- Code examples and service configurations
 
 ## 3. Metrics for non-functional requirements
 
