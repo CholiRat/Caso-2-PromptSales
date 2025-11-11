@@ -1,20 +1,10 @@
-# Caso-2-PromptSales
-### Instituto Tecnológico de Costa Rica
-### Escuela de Ingeniería en Computación
-### Students
+# PromptSales Software Design
+
+### Members
 - Alexander Brenes Garita - 2018191805
 - Andrés Baldi Mora - 2024088934
 - Lindsay Nahome Marín Sánchez - 2024163904
 - Javier Rodríguez Menjívar - 2023074732
-### Course
-Software Design
-### Delivery dates
-🗓️ First delivery: October 26, 2025
-
-🗓️ Second delivery: November 11, 2025
-
-🗓️ Final delivery: November 23, 2025
-
 
 ### Project Structure:
 
