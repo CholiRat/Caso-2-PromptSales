@@ -519,7 +519,7 @@ Check the pdf file to gain a better look of this diagram:
 ## 5. Architecture design
 The diagram should be read Left-Right, Top-Down
 
-![Architecture Diagram](img/ArchitectureDesignDiagram.png)
+![Architecture Diagram](img/)
 
 Check the pdf file to gain a better look of this diagram:
 
