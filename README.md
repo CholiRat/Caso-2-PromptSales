@@ -512,12 +512,13 @@ To ensure that the versions of the technologies used in production and developme
 
 ### 5.1 Microservices in Azure Kubernetes Services
 
-| | Layer | Technology | Version / Specification | Justification |
-| |:--- | :--- | :--- | :--- |
-| **Backend** | **Python** | `v3.13.x` | High end perfomance version of python, could have less access to some libreries than other version like v3.13.x |
-| | **FastAPI** | `v0.110.x` | High end framework for REST Microservices |
-| | **Pydantic** | `v2.7.x` | High speed data validators |
-| | **Redis-py** | `v5.0.x.` | Distributed cache with high availability |
+| Technology       | Version / Specification | Justification |
+|------------------------|-----------|---------------------|
+| **Python**   | `v3.13.x`  | High end perfomance version of python, could have less access to some libreries than other version like v3.13.x |
+| **FastAPI**  | `v0.110.x` | High end framework for REST Microservices           |
+| **Pydantic** | `v2.7.x`   | High speed data validators           |
+| **Redis-py** | `v5.0.x.`  | Distributed cache with high availability           |
+
 
 
 #### Diagram
