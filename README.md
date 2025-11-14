@@ -202,7 +202,7 @@ For the SQL databases, scalability is managed directly by Azure SQL Database. Th
 
 For more information check the oficial documentation: [Elastic scale - Azure SQL Database | Microsoft Learn](https://learn.microsoft.com/es-es/azure/azure-sql/database/elastic-scale-introduction?view=azuresql)
 
-To meet the requirement of handling 100,000 transactions, the data will be partitioned across 3 sharded set of databases. This is according to the data retrieved from the perfomance benchmarks
+To meet the requirement of handling 100,000 transactions, the data will be partitioned across 3 sharded set of databases. This is according to the data retrieved from the performance benchmarks
 -	**Number of Shards**: The system will be configured with 3 shards.
 -	**Data Distribution**: Information will be partitioned into 3 distinct parts using a hash function over the campaignIDs. In this way, distribution is balanced according to the amount of campaigns in the system.
 
@@ -510,15 +510,38 @@ Prompt CRM has the goal to follow activity of interested customers.
 
 To ensure that the versions of the technologies used in production and development are correct, the following technologies and their corresponding versions must be used in the software. This is intended to prevent issues during both development and production stages.
 
-### 5.1 Microservices in Azure Kubernetes Services
+### 5.1 Frontend Runtime Environment (Vercel): Node.js v20 (LTS) with Next.js v14.2.x
+
+### 5.2 Microservices in Azure Kubernetes Services (Backend) and Infrastructure
 
 | Technology       | Version / Specification | Justification |
 |------------------------|-----------|---------------------|
-| **Python**   | `v3.13.x`  | High end perfomance version of python, could have less access to some libreries than other version like v3.13.x |
+| **Python**   | `v3.12.x`  | High end performance version of python and can access most of python libraries |
 | **FastAPI**  | `v0.110.x` | High end framework for REST Microservices           |
 | **Pydantic** | `v2.7.x`   | High speed data validators           |
 | **Redis-py** | `v5.0.x.`  | Distributed cache with high availability           |
+| **Kubernetes** | `v1.29`  | Supported stable version by AKS | 
+| **Uvicorn** | `v0.29.x`   | ASGI Server for executing FastAPI apps on production | 
+| **Docker** | `v26.x`   | Standard OCI container engine for building images | 
 
+
+### 5.3 Data Persistence
+
+| Technology       | Version / Specification | Justification |
+|------------------------|-----------|---------------------|
+| **Azure SQL Database** | `2022 SQL Server`  | Principal relational database  |
+| **Azure Cosmos DB for MongoDB (Cosmos DB)**  |API Mongo `v6.0` | NoSQL for PromptContent and massive logs |
+| **Azure Cache for Redis (Redis)** | `v6.0`| Basic, Standard or Premium tier, does not support upgrades to newer Redis version|
+| **SQLAlchemy** | `v2.0.x` | Modern ORM for relational databases with Asynchronous support|
+| **aioodbc** | `v0.3.x` | Asynchronous driver for connecting FastAPI with Azure SQL Server |
+
+### 5.4 MCP Service and AI SDKs
+
+| Technology       | Version / Specification | Justification |
+|------------------------|-----------|---------------------|
+| **Model Context Protocol (MCP) Draft**   | `v1.0`  | N/A |
+| **OpenAI Python SDK**  | `v1.x` | N/A |
+| **PyJWT**  | `v2.8.x` | Required for validating JWT tokens (OAuth 2.0 security) |
 
 
 #### Diagram
