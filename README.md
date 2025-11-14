@@ -67,11 +67,11 @@ Caso-2-PromptSales/
 │   │           ├── AdServices/
 │   │           ├── PaymentServices/
 │   │           └── UserServices/
-|   ├── gateway/
-|   ├── mcpServer/
-|   │   └── integrations/
-|   ├── scripts/
-|   ├── security/
+│   ├── gateway/
+│   ├── mcpServer/
+│   │   └── integrations/
+│   ├── scripts/
+│   ├── security/
 │   └── test/
 └── README.md
 ```
