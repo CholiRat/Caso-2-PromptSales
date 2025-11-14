@@ -517,6 +517,8 @@ Prompt CRM has the goal to follow activity of interested customers.
 
 To ensure that the versions of the technologies used in production and development are correct, the following technologies and their corresponding versions must be used in the software. This is intended to prevent issues during both development and production stages.
 
+Dependency versions will be strictly controlled via pinned version files (e.g., `requirements.txt` for Python, `package-lock.json` for Node.js) and immutable Docker image tags (avoiding 'latest' in production) to ensure consistency across environments.
+
 ### 5.1 Frontend Runtime Environment (Vercel): Node.js v20 (LTS) with Next.js v14.2.x
 
 ### 5.2 Microservices in Azure Kubernetes Services (Backend) and Infrastructure

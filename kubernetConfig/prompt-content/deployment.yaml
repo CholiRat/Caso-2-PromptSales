@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: promptcontent-api
-        image: promptads-content:latest		# Image for the deployment
+        image: promptads-content:latest		# Image for the deployment, in a real environment this tag must be the version of the release defined on the pipeline
         ports:
           - containerPort: 8081
         env:
