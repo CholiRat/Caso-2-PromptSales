@@ -14,58 +14,65 @@ Caso-2-PromptSales/
 ├── img/
 ├── kubernetConfig/
 ├── src/
-│   └── Domain/
-│       ├── PromptAds/
-│       │   ├── Contracts/
-│       │   │   ├── CampaignContracts/
-│       │   │   └── TargetContracts/
-│       │   ├── Controllers/
-│       │   │   ├── CampaignControllers/
-│       │   │   └── TargetControllers/
-│       │   ├── Infrastructure/
-│       │   │   └── Repositories/
-│       │   └── Services/
-│       │       ├── CampaignServices/
-│       │       └── TargetServices/
-│       ├── PromptCRM/
-│       │   ├── Contracts/
-│       │   │   ├── ClientContracts/
-│       │   │   └── SalesContracts/
-│       │   ├── Controllers/
-│       │   │   ├── ClientControllers/
-│       │   │   └── SalesControllers/
-│       │   ├── Infrastructure/
-│       │   │   └── Repositories/
-│       │   └── Services/
-│       │       ├── ClientServices/
-│       │       └── SalesServices/
-│       ├── PromptContent/
-│       │   ├── Contracts/
-│       │   │   ├── GeneratedContentContracts/
-│       │   │   └── PromptContracts/
-│       │   ├── Controllers/
-│       │   │   ├── GeneratedContentControllers/
-│       │   │   └── PromptControllers/
-│       │   ├── Infrastructure/
-│       │   │   └── Repositories/
-│       │   └── Services/
-│       │       ├── GeneratedContentServices/
-│       │       └── PromptServices/
-│       └── PromptSales/
-│           ├── Contracts/
-│           │   ├── AdContracts/
-│           │   ├── PaymentContracts/
-│           │   └── UserContracts/
-│           ├── Controllers/
-│           │   ├── AdControllers/
-│           │   ├── PaymentControllers/
-│           │   └── UserControllers/
-│           ├── Infrastructure/
-│           │   └── Repositories/
-│           └── Services/
-│               ├── AdServices/
-│               ├── PaymentServices/
-│               └── UserServices/
+|   ├── config/
+│   ├── Domain/
+│   |   ├── PromptAds/
+│   |   │   ├── Contracts/
+│   |   │   │   ├── CampaignContracts/
+│   |   │   │   └── TargetContracts/
+│   |   │   ├── Controllers/
+│   |   │   │   ├── CampaignControllers/
+│   |   │   │   └── TargetControllers/
+│   |   │   ├── Infrastructure/
+│   |   │   │   └── Repositories/
+│   |   │   └── Services/
+│   |   │       ├── CampaignServices/
+│   |   │       └── TargetServices/
+│   |   ├── PromptContent/
+│   |   │   ├── Contracts/
+│   |   │   │   ├── GeneratedContentContracts/
+│   |   │   │   └── PromptContracts/
+│   |   │   ├── Controllers/
+│   |   │   │   ├── GeneratedContentControllers/
+│   |   │   │   └── PromptControllers/
+│   |   │   ├── Infrastructure/
+│   |   │   │   └── Repositories/
+│   |   │   └── Services/
+│   |   │       ├── GeneratedContentServices/
+│   |   │       └── PromptServices/
+│   |   ├── PromptCRM/
+│   |   │   ├── Contracts/
+│   |   │   │   ├── ClientContracts/
+│   |   │   │   └── SalesContracts/
+│   |   │   ├── Controllers/
+│   |   │   │   ├── ClientControllers/
+│   |   │   │   └── SalesControllers/
+│   |   │   ├── Infrastructure/
+│   |   │   │   └── Repositories/
+│   |   │   └── Services/
+│   |   │       ├── ClientServices/
+│   |   │       └── SalesServices/
+│   |   └── PromptSales/
+│   |       ├── Contracts/
+│   |       │   ├── AdContracts/
+│   |       │   ├── PaymentContracts/
+│   |       │   └── UserContracts/
+│   |       ├── Controllers/
+│   |       │   ├── AdControllers/
+│   |       │   ├── PaymentControllers/
+│   |       │   └── UserControllers/
+│   |       ├── Infrastructure/
+│   |       │   └── Repositories/
+│   |       └── Services/
+│   |           ├── AdServices/
+│   |           ├── PaymentServices/
+│   |           └── UserServices/
+|   ├── gateway/
+|   ├── mcpServer/
+|   |   └── integrations/
+|   ├── scripts/
+|   ├── security/
+|   └── test/
 └── README.md
 ```
 
