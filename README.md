@@ -577,4 +577,84 @@ Check the pdf file to gain a better look of this diagram:
 [Architecture Desing Lucidchart Diagram (View Only)](https://lucid.app/lucidchart/154e8bce-2df7-4d76-9ab9-0257def25d2d/edit?viewport_loc=3136%2C-3144%2C6596%2C3356%2Cm-5o7ONTd-nK&invitationId=inv_8f3e4cd8-0078-4e37-8dc0-21894f54e0b4)
 
 
+### 6.1 Design Patterns
 
+To ensure modularity, maintainability, and scalability in the PromptSales ecosystem, we have employed the following design patterns:
+
+#### DTO (Data Transfer Object) Pattern
+
+This pattern is used to decouple the persistence layer (databases) from the presentation layer (APIs). In Python, Pydantic is used to define DTOs, which specify what data enters and leaves the API. This prevents the exposure of sensitive information and guarantees validation at runtime.
+
+Code Example:
+```python
+from pydantic import BaseModel, Field, EmailStr
+from datetime import datetime
+from typing import Optional
+
+# DTO for request
+class PaymentRequestDTO(BaseModel):
+    user_id: str = Field(..., description="ID of the paying user")
+    amount: float = Field(..., gt=0, description="Payment amount")
+    currency: str = Field(default="USD", max_length=3)
+    payment_method: str = Field(..., pattern="^(card|paypal|transfer)$")
+
+# DTO for response
+class PaymentResponseDTO(BaseModel):
+    transaction_id: str
+    status: str
+    processed_at: datetime
+    message: str
+```
+
+
+#### Repository Pattern
+
+The Repository pattern abstracts data access so the business domain remains agnostic to the underlying database. Each domain aggregate (e.g., Campaign, User) defines its own repository interface, allowing us to switch from Azure SQL to an in-memory database for unit testing without modifying business logic.
+
+Code Example:
+```python
+from abc import ABC, abstractmethod
+from typing import Optional
+from src.Domain.PromptSales.Contracts.PaymentContracts import PaymentResponseDTO
+# We assume a DB model called PaymentModel
+# from src.Database.Models import PaymentModel 
+
+# 1. The Interface (Repository Contract)
+# This defines WHAT can be done, but not HOW.
+class IPaymentRepository(ABC):
+    @abstractmethod
+    async def save(self, payment: PaymentResponseDTO) -> bool:
+        pass
+
+    @abstractmethod
+    async def get_by_id(self, transaction_id: str) -> Optional[PaymentResponseDTO]:
+        pass
+
+# 2. The Concrete Implementation (SQL Server with SQLAlchemy)
+# This defines HOW it is done (SQL, commits, etc.)
+class SqlPaymentRepository(IPaymentRepository):
+    def __init__(self, db_session):
+        self.db = db_session
+
+    async def save(self, payment_dto: PaymentResponseDTO) -> bool:
+        try:
+            # Convert DTO to Database Model (Mapping)
+            new_record = PaymentModel(
+                trans_id=payment_dto.transaction_id,
+                amount=payment_dto.amount,
+                status=payment_dto.status
+            )
+            self.db.add(new_record)
+            await self.db.commit()
+            return True
+        except Exception as e:
+            await self.db.rollback()
+            return False
+
+    async def get_by_id(self, transaction_id: str) -> Optional[PaymentResponseDTO]:
+        # Logic to query SQL
+        record = await self.db.query(PaymentModel).filter_by(trans_id=transaction_id).first()
+        if record:
+            return PaymentResponseDTO(**record.__dict__)
+        return None
+```
