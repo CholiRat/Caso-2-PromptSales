@@ -681,6 +681,91 @@ The creation script for PromptSales can be consulted here: [PromptSales schema](
 ### 7.2. MongoDB
 PromptContent uses a non-relational database. The decision was taken because it allows more flexibility when filling the metadata for prompt generated content.
 #### -> PromptContent
-These are some examples of stored documents
+These are some examples of stored documents:
+
+- PCContentRequests
+``` json
+{
+  "_id": {
+    "$oid": "69275b4d7c9a8f0b3772f122"
+  },
+  "requestId": "REQ_0004",
+  "clientId": "CLIENT_026",
+  "userId": "USER_010",
+  "contentType": "video",
+  "description": "Media resulta cuadro señor manuel niños.",
+  "targetAudience": "families",
+  "campaignDescription": "Época familia formación nuestra línea objetivo. Algún jefe psoe animales vivir.",
+  "httpMethod": "POST",
+  "requestHeaders": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer token"
+  },
+  "requestBody": {
+    "style": "modern",
+    "tone": "professional"
+  },
+  "queryParams": {},
+  "ipAddress": "196.115.234.173",
+  "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_1 like Mac OS X) AppleWebKit/536.0 (KHTML, like Gecko) FxiOS/16.1q8828.0 Mobile/64A259 Safari/536.0",
+  "status": "completed",
+  "createdAt": {
+    "$date": "2025-10-09T19:55:57.287Z"
+  },
+  "completedAt": {
+    "$date": "2025-09-05T19:55:57.287Z"
+  },
+  "processingTime": 27635,
+  "generatedContent": [
+    {
+      "contentId": "CNT_4_0",
+      "contentType": "video",
+      "url": "https://montes.net/"
+    },
+    {
+      "contentId": "CNT_4_1",
+      "contentType": "video",
+      "url": "http://construccion.com/"
+    }
+  ]
+}
+``` 
+- PCMedia
+``` json
+{
+  "_id": {
+    "$oid": "69275eae4caa34ea2a05e503"
+  },
+  "clientId": "CLIENT_018",
+  "requestDescription": "Contenido visual profesional: imagen con mobile, iphone, modern. Diseño elegante con paleta de colores azul, ideal para campañas de marketing digital en redes sociales. Recurso visual optimizado para smartwatch y contenido publicitario.",
+  "hashtags": [
+    "#digital",
+    "#technology",
+    "#smartwatch",
+    "#electronics",
+    "#mobile",
+    "#modern",
+    "#iphone"
+  ],
+  "deliveryStatus": "Delivered",
+  "format": "webp",
+  "mediaId": "IMG_002",
+  "mediaUrl": "https://pixabay.com/get/g715adbe17dac0d2ae89f8d6bc4e58a82e1f789a8636c4733948f027daaedace402b6d087aaec40cd8f2d360e2fb1704eb194cc3e370029e19694008c0bdcb333_640.jpg",
+  "fileName": "image_002.jpg",
+  "size": 3501552,
+  "description": "Contenido visual profesional: imagen con mobile, iphone, modern. Diseño elegante con paleta de colores azul, ideal para campañas de marketing digital en redes sociales. Recurso visual optimizado para smartwatch y contenido publicitario.",
+  "category": "ads",
+  "platform": "Instagram",
+  "userId": "USER_020",
+  "createdAt": {
+    "$date": "2025-09-17T20:09:07.423Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-11T20:09:07.423Z"
+  },
+  "usageCount": 24,
+  "rights": "CC-BY"
+}
+```
 
 
