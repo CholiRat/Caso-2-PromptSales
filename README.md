@@ -662,22 +662,25 @@ class SqlPaymentRepository(IPaymentRepository):
 
 ### 7.1. SQL
 As stated beforehand, Azure SQL database will host the three databases for the services PromptAds, PromptCRM and PromptSales.
+These three services are closely interlinked, so compatibility is necessary.
 #### -> PromptAds database
 ![PromptAds Database Diagram](documents/img/PromptAdsDiagram.png)
 
-The script for the PromptAds database schema can be consulted here:   
+The script for the PromptAds database schema can be consulted here: [PromptAds schema](src/database/sql/schemas/CreationPromptAds.sql)
 
 #### -> PromptCRM database
 ![PromptCRM Database Diagram](documents/img/PromptCRMDiagram.png)
 
-The script for the PromptCRM database schema is in the following link:
+The script for the PromptCRM database schema is in the following link: [PromptCRM schema](src/database/sql/schemas/CreationPromptCRM.sql)
 
 #### -> PromptSales database
 ![PromptSales Database Diagram](documents/img/PromptSalesDiagram.png)
 
-The creation script for PromptSales can be consulted here:
+The creation script for PromptSales can be consulted here: [PromptSales schema](src/database/sql/schemas/CreationPromptSales.sql)
 
 ### 7.2. MongoDB
-
 PromptContent uses a non-relational database. The decision was taken because it allows more flexibility when filling the metadata for prompt generated content.
+#### -> PromptContent
+These are some examples of stored documents
+
 
