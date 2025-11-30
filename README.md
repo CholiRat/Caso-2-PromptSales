@@ -200,7 +200,7 @@ The scale takes place when more than 80% of CPU is being consumed in one pod or 
 
 All scaling rules and pod configurations are defined and managed through declarative YAML files.
 
-[Check kubernetes configuration folder]( https://github.com/CholiRat/Caso-2-PromptSales/tree/main/kubernetConfig)
+[Check kubernetes configuration folder](src/deploy/kubernetConfig)
 
 For the SQL databases, scalability is managed directly by Azure SQL Database. This plataform offering provides robust horizontal scaling through two primary mechanisms:
 
@@ -267,7 +267,7 @@ data:
   PROMPTCONTENT_DB_SECONDARY: "promptcontent-db-westeurope.database.windows.net"
   PROMPTCRM_DB_SECONDARY: "promptcrm-db-westeurope.database.windows.net"
 ```
-Check the [azure configuration for sql databases](kubernetConfig/azure-config.yaml)
+Check the [azure configuration for sql databases](src/deploy/kubernetConfig/azure-config.yaml)
 
 For more information about Geo-replication, visit: [Active-Geo-replication](https://learn.microsoft.com/en-us/azure/azure-sql/database/active-geo-replication-configure-portal?view=azuresql&tabs=portal)
 
@@ -288,7 +288,7 @@ This is a section of the HPA file for the promptads backend
   minReplicas: 3
   maxReplicas: 30	
 ```
-Check the [HPA.yaml](kubernetConfig/prompt-ads/deployment.yaml) file for promptads.
+Check the [HPA.yaml](src/deploy/kubernetConfig/prompt-ads/deployment.yaml) file for promptads.
 
 With the LoadBalancer type service, the application efficiently distributes incoming network requests across all available, healthy application pods.
 ```yaml
@@ -310,7 +310,7 @@ spec:
       targetPort: 8080      
 ```
 
-Check the [service.yaml](kubernetConfig/prompt-sales/service.yaml) file for promptsales.
+Check the [service.yaml](src/deploy/kubernetConfig/prompt-sales/service.yaml) file for promptsales.
 
 #### Downtimes
 Total minutes in a month: 44 640 min
@@ -392,7 +392,7 @@ Source code and task management will adhere to the following methodologies:
 
       GitFlow Image
 
-      ![GitFlow](img/Gitflow.jpg)
+      ![GitFlow](documents/img/Gitflow.jpg)
 
 - Other things that are going to be employ for Maintainability during development are the following:
 
@@ -558,21 +558,21 @@ The following is an image of the Domain Driven Design backend. The frontend comm
 
 The main application PromptSales gains access to Prompt Content, Prompt Ads and Prompt CRM through the infrastructure layer with a facade. From this point, it uses an ETL approach to obtain data from sub-businesses and syncronize information.
 
-![DDD Diagram](img/DomainDrivenDesign.png)
+![DDD Diagram](documents/img/DomainDrivenDesign.png)
 Check the pdf file to gain a better look of this diagram: 
 
-[DomainDrivenDesign-Diagram.pdf](diagrams/DomainDrivenDesign.pdf)
+[DomainDrivenDesign-Diagram.pdf](documents/diagrams/DomainDrivenDesign.pdf)
 
 [DDD Lucidchart Diagram (View only)](https://lucid.app/lucidchart/b1efdc09-267e-49df-b0bc-38f27446f985/edit?viewport_loc=-1700%2C-569%2C3333%2C1939%2C0_0&invitationId=inv_0a85b824-b4b4-47a2-8483-7e83877e60e0)
 
 ## 6. Architecture design
 The diagram should be read Left-Right, Top-Down
 
-![Architecture Diagram](img/ArchitectureDesignDiagram.png)
+![Architecture Diagram](documents/img/ArchitectureDesignDiagram.png)
 
 Check the pdf file to gain a better look of this diagram:
 
-[ArchitectureDesign-Diagram](diagrams/ArchitectureDesignDiagram.pdf)
+[ArchitectureDesign-Diagram](documents/diagrams/ArchitectureDesignDiagram.pdf)
 
 [Architecture Desing Lucidchart Diagram (View Only)](https://lucid.app/lucidchart/154e8bce-2df7-4d76-9ab9-0257def25d2d/edit?viewport_loc=3136%2C-3144%2C6596%2C3356%2Cm-5o7ONTd-nK&invitationId=inv_8f3e4cd8-0078-4e37-8dc0-21894f54e0b4)
 
