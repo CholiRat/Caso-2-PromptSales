@@ -658,3 +658,26 @@ class SqlPaymentRepository(IPaymentRepository):
             return PaymentResponseDTO(**record.__dict__)
         return None
 ```
+## 7. Databases
+
+### 7.1. SQL
+As stated beforehand, Azure SQL database will host the three databases for the services PromptAds, PromptCRM and PromptSales.
+#### -> PromptAds database
+![PromptAds Database Diagram](documents/img/PromptAdsDiagram.png)
+
+The script for the PromptAds database schema can be consulted here:   
+
+#### -> PromptCRM database
+![PromptCRM Database Diagram](documents/img/PromptCRMDiagram.png)
+
+The script for the PromptCRM database schema is in the following link:
+
+#### -> PromptSales database
+![PromptSales Database Diagram](documents/img/PromptSalesDiagram.png)
+
+The creation script for PromptSales can be consulted here:
+
+### 7.2. MongoDB
+
+PromptContent uses a non-relational database. The decision was taken because it allows more flexibility when filling the metadata for prompt generated content.
+
