@@ -10,11 +10,39 @@
 
 ```bash
 Caso-2-PromptSales/
-├── diagrams/
-├── img/
-├── kubernetConfig/
+├── documents/
+│   ├── diagrams/
+│   └── img/
 ├── src/
+│   ├── common/
+│   │   ├── dto/
+│   │   ├── exceptions/
+│   │   ├── logging/
+│   │   ├── middleware/
+│   │   └── utils/
 │   ├── config/
+│   ├── database/
+│   │   ├── nosql/
+│   │   │   ├── examples/
+│   │   │   └── schemas/
+│   │   ├── orm/
+│   │   │   ├── models/
+│   │   │   └── sessions/
+│   │   ├── pipeline/
+│   │   │   ├── etl/
+│   │   │   └── jobs/
+│   │   ├── sql/
+│   │   │   ├── migrations/
+│   │   │   ├── schemas/
+│   │   │   └── stored-procedures/
+│   ├── deploy/
+│   │   ├── ci-cd/
+│   │   ├── kubernetConfig/
+│   │   │   ├── prompt-ads/
+│   │   │   ├── prompt-content/
+│   │   │   ├── prompt-crm/
+│   │   │   └── prompt-sales/
+│   │   └── scripts/
 │   ├── Domain/
 │   │   ├── PromptAds/
 │   │   │   ├── Contracts/
@@ -70,9 +98,14 @@ Caso-2-PromptSales/
 │   ├── gateway/
 │   ├── mcpServer/
 │   │   └── integrations/
-│   ├── scripts/
 │   ├── security/
 │   └── test/
+│       ├── api/
+│       ├── integration/
+│       ├── mcp/
+│       ├── security/
+│       ├── stress/
+│       └── unit/
 └── README.md
 ```
 
