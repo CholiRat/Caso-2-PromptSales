@@ -601,7 +601,7 @@ Check the pdf file to gain a better look of this diagram:
 ## 6. Architecture design
 The diagram should be read Left-Right, Top-Down
 
-![Architecture Diagram](documents/img/ArchitectureDesignDiagram.png)
+![Architecture Diagram](documents/img/ArchitectureDesignDiagram.jpeg)
 
 Check the pdf file to gain a better look of this diagram:
 
