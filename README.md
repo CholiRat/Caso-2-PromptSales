@@ -725,6 +725,8 @@ The creation script for PromptSales can be consulted here: [PromptSales schema](
 ### 7.2. MongoDB
 PromptContent uses a non-relational database. The decision was taken because it allows more flexibility when filling the metadata for prompt generated content.
 #### -> PromptContent
+![PromptContent Database Objects](documents/img/PromptContentObject.png)
+
 The file for the creation of PromptContent's schema is located here: [PromptContent schema](src/database/nosql/schemas/CreationPromptContent.py). It serves as a guide to create the various entities for this database.
 
 This schema is not strict and can have extra information depending on the object. 
