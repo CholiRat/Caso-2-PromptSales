@@ -692,6 +692,17 @@ class SqlPaymentRepository(IPaymentRepository):
         return None
 ```
 ## 7. Databases
+The names for columns and entities on the databases follow a strict nomenclature that guarantee consistency.
+
+For every database, a standard is established to name tables:
+- **PromptSales:** PS[TableNamePlural]. Ex: PSUsers
+- **PromptAds:** PA[TableNamePlural]. Ex: PACampaigns
+- **PromptContent:** PC[TableNamePlural]. Ex: PCMedia
+- **PromptCRM:** PCR[TableNamePlural]. Ex: PCRLeads
+
+Similarly, all primary and foreign keys are written as follow: Id[TableName]. Ex: IdUser 
+
+Foreign keys MUST NOT change the name of the column being referenced
 
 ### 7.1. SQL
 As stated beforehand, Azure SQL database will host the three databases for the services PromptAds, PromptCRM and PromptSales.
@@ -714,8 +725,11 @@ The creation script for PromptSales can be consulted here: [PromptSales schema](
 ### 7.2. MongoDB
 PromptContent uses a non-relational database. The decision was taken because it allows more flexibility when filling the metadata for prompt generated content.
 #### -> PromptContent
-These are some examples of stored documents:
+The file for the creation of PromptContent's schema is located here: [PromptContent schema](src/database/nosql/schemas/CreationPromptContent.py). It serves as a guide to create the various entities for this database.
 
+This schema is not strict and can have extra information depending on the object. 
+
+These are some examples of stored documents:
 - PCContentRequests
 ``` json
 {
