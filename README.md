@@ -822,10 +822,12 @@ PromptSales will perform an ETL procedure every 11 minutes to mantain informatio
 The main service used to make the connection is Azure Data Factory. It provides copy and mapping functionalities that allow to obtain and transform the data from the tables and documents.
 
 It includes a Schedule trigger that acts as a background job. It will be configured as follow:
-Name | PromptSalesETL
-Trigger | Schedule
-Recurrency | Minute
-Interval | 11
+
+| Name           | Trigger type |  Recurrency | Interval |
+|----------------|--------------|-------------|----------|
+| PromptSalesETL | Schedule     | Minute      | 11       |
+
+In order to extract only new rows, Azure Data Factory checks the createdAt and updatedAt column. If either of those is newer than the last executed ETL, it gets sent to PromptSales. Through a MERGE operation, the results get either updated or inserted accordingly.
 
 This diagram shows this process:
 ![ETLPipeline Image](documents/img/ETLPipeline.png)
