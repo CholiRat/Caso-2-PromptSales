@@ -827,6 +827,7 @@ It includes a Schedule trigger that acts as a background job. It will be configu
 |----------------|--------------|-------------|----------|
 | PromptSalesETL | Schedule     | Minute      | 11       |
 
+#### Delta
 In order to extract only new rows, Azure Data Factory checks the createdAt and updatedAt column. If either of those is newer than the last executed ETL, it gets sent to PromptSales. Through a MERGE operation, the results get either updated or inserted accordingly.
 
 This diagram shows this process:
