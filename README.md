@@ -816,5 +816,20 @@ These are some examples of stored documents:
   "rights": "CC-BY"
 }
 ```
+### 7.3. Data pipeline
+PromptSales will perform an ETL procedure every 11 minutes to mantain information across the three databases up to date. This data pipeline extracts information from the three subsidiary systems' databases and transfer it into PromptSales.
+
+The main service used to make the connection is Azure Data Factory. It provides copy and mapping functionalities that allow to obtain and transform the data from the tables and documents.
+
+It includes a Schedule trigger that acts as a background job. It will be configured as follow:
+Name | PromptSalesETL
+Trigger | Schedule
+Recurrency | Minute
+Interval | 11
+
+This diagram shows this process:
+![ETLPipeline Image](documents/img/ETLPipeline.png)
+
+
 
 
