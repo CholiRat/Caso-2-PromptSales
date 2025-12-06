@@ -7,7 +7,7 @@ export interface PaginationMeta {
   totalPages: number;
 }
 
-//API response
+//API response 
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;
