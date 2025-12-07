@@ -130,6 +130,11 @@ This project will be executed through three iterations.
 - Project structure with separation between modules
 - Code examples and service configurations
 
+#### Third iteration:
+- Database designs
+- Kunernetes deployment
+- MCP server integration
+
 ## 3. Metrics for non-functional requirements
 
 ## 3.1 Performance
@@ -566,7 +571,6 @@ Dependency versions will be strictly controlled via pinned version files (e.g., 
 | **Uvicorn** | `v0.29.x`   | ASGI Server for executing FastAPI apps on production | 
 | **Docker** | `v26.x`   | Standard OCI container engine for building images | 
 
-
 ### 5.3 Data Persistence
 
 | Technology       | Version / Specification | Justification |
@@ -584,7 +588,7 @@ Dependency versions will be strictly controlled via pinned version files (e.g., 
 | **Model Context Protocol (MCP) Draft**   | `v1.0`  | N/A |
 | **OpenAI Python SDK**  | `v1.x` | N/A |
 | **PyJWT**  | `v2.8.x` | Required for validating JWT tokens (OAuth 2.0 security) |
-
+| **Pinecone** |  | N/A |
 
 #### Diagram
 The following is an image of the Domain Driven Design backend. The frontend communicates through an API and has access to all sub-businesses. 
@@ -614,6 +618,14 @@ Check the pdf file to gain a better look of this diagram:
 
 To ensure modularity, maintainability, and scalability in the PromptSales ecosystem, we have employed the following design patterns:
 
+#### Hexagonal pattern
+
+The business logic is separated from the external services through the controllers and anti-corruption layer. 
+
+#### Microservices pattern
+
+Each of the businesses in the system works as a different service, which includes its own database. Communication between them occurs through Azure Service Bus.
+
 #### DTO (Data Transfer Object) Pattern
 
 This pattern is used to decouple the persistence layer (databases) from the presentation layer (APIs). In Python, Pydantic is used to define DTOs, which specify what data enters and leaves the API. This prevents the exposure of sensitive information and guarantees validation at runtime.
@@ -638,8 +650,6 @@ class PaymentResponseDTO(BaseModel):
     processed_at: datetime
     message: str
 ```
-
-
 #### Repository Pattern
 
 The Repository pattern abstracts data access so the business domain remains agnostic to the underlying database. Each domain aggregate (e.g., Campaign, User) defines its own repository interface, allowing us to switch from Azure SQL to an in-memory database for unit testing without modifying business logic.
@@ -691,6 +701,11 @@ class SqlPaymentRepository(IPaymentRepository):
             return PaymentResponseDTO(**record.__dict__)
         return None
 ```
+
+#### Abstract factory Pattern
+
+In order to integrate various external APIs with the functions of PromptAds, an abstract factory pattern will be implemented that gives functionality to each family of Campaign services
+
 ## 7. Databases
 The names for columns and entities on the databases follow a strict nomenclature that guarantee consistency.
 
