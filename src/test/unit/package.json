@@ -1,4 +1,3 @@
-# Archivo: package.json (sección de scripts de testing)
 {
   "scripts": {
     "test:unit": "pytest src/test/unit -v --cov=src --cov-report=html",
